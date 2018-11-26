@@ -6,12 +6,16 @@
     {
       "label": "host server",
       "type": "shell",
-      "command": "http-server -p 8080"
+      "command": "http-server -p 8080",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     },
     {
       "label": "install host-server",
       "type": "shell",
-      "command": "npm install http-server -g"
+      "command": "npm install http-server -g",
     }
   ]
 }
