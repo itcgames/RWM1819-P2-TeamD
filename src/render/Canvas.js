@@ -1,5 +1,3 @@
-import { Color } from "../utils/Color.js";
-
 /**
  * Initialises the canvas - the drawing surface. The canvas
  * is added to the document. When a HTML document is loaded into a
@@ -31,7 +29,7 @@ function createHTMLCanvas(canvasID, width, height) {
  * @class
  * @classdesc Uses the html canvas tag as the target for all draw calls.
  */
-export class Canvas {
+class Canvas {
   /**
    * Construct a canvas with the passed id.
    * @constructor

@@ -1,9 +1,12 @@
-import { Canvas } from "./render/Canvas.js";
-
-export class Game {
+class Game {
   constructor() {
     this.prevDt = Date.now();
     this.canvas = new Canvas("main-canvas");
+    console.log(collisionManager);
+    console.log(Animation);
+    console.log(AnimationManager);
+    console.log(DragDrop);
+    console.log(MenuManager);
   }
 
   run() {

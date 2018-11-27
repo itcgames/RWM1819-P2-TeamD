@@ -20,7 +20,7 @@ function clamp(value) {
  * @class
  * @classdesc Will contain red, green, blue, alpha values clamped between (0, 255)
  */
-export class Color {
+class Color {
   /**
    * Constructs a 
    * @constructor
