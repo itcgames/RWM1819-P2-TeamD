@@ -6,11 +6,21 @@
     <base href="/">
     <title>Golf Souls</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <!-- External Components -->
+    <script src="lib/RWM1819-Collision-B/rwm-collision-b.js"></script>
+    <script src="lib/RWM1819-Sprite-A/Animation.js"></script>
+    <script src="lib/RWM1819-Sprite-A/AnimationManager.js"></script>
+    <script src="lib/RWM1819-DnD-A/spec/Drag-Drop.js"></script>
+    <script src="lib/RWM1819-Menu-A/src/menu_manager.js"></script>
+
+    <!-- Game Components -->
+    <script src="src/render/Canvas.js"></script>
+    <script src="src/utils/Color.js"></script>
+    <script src="src/Game.js"></script>
+    
+    <script src="src/main.js"></script>
 </head>
-<body>
-  <script type="module">
-    import { main } from "./src/main.js";
-    main();
-  </script>
+<body onload="main();">
 </body>
 </html>

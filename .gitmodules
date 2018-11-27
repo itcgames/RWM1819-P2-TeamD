@@ -1,0 +1,15 @@
+[submodule "lib/RWM1819-Collision-B"]
+	path = lib/RWM1819-Collision-B
+	url = https://github.com/itcgames/RWM1819-Collision-B.git
+[submodule "lib/RWM1819-Sprite-A"]
+	path = lib/RWM1819-Sprite-A
+	url = https://github.com/itcgames/RWM1819-Sprite-A.git
+[submodule "lib/RWM1819-DnD-A"]
+	path = lib/RWM1819-DnD-A
+	url = https://github.com/itcgames/RWM1819-DnD-A.git
+[submodule "lib/RWM1819-Menu-A"]
+	path = lib/RWM1819-Menu-A
+	url = https://github.com/itcgames/RWM1819-Menu-A.git
+[submodule "lib/RWM1819-Input-B"]
+	path = lib/RWM1819-Input-B
+	url = https://github.com/itcgames/RWM1819-Input-B.git
