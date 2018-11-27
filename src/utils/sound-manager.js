@@ -218,7 +218,11 @@ class SoundManager {
   onBufferLoad(songName, volume, xmlRequest, event) {
     let arrayBuffer = xmlRequest.response;
 
-    this.audioContext.decodeAudioData(arrayBuffer, this.onDecodeSuccess.bind(this, songName, volume), this.onDecodeFail.bind(this, songName));
+    this.audioContext.decodeAudioData(
+        arrayBuffer,
+        this.onDecodeSuccess.bind(this, songName, volume),
+        this.onDecodeFail.bind(this, songName)
+    );
   }
 
   /**
