@@ -3,7 +3,7 @@ class Game {
   constructor() {
     this.prevDt = Date.now();
     this.canvas = new Canvas("main-canvas");
-    this.gravity = 9.8;
+    this.gravity = 0.008;
     this.ball = new Ball(100,100);
   }
 
@@ -21,6 +21,7 @@ class Game {
 
   update() {
     const dt = this.calculateDt();
+    this.ball.applyForce(0,this.gravity);
     this.ball.update(dt);
   }
 
