@@ -3,8 +3,6 @@ class Game {
   constructor() {
     this.prevDt = Date.now();
     this.canvas = new Canvas("main-canvas");
-    this.gravity = 0.008;
-    this.ball = new Ball(100,100);
 
     //Creating the Menu Manager
     this.mManager = new MenuManager();
@@ -13,6 +11,7 @@ class Game {
     this.mManager.addScene("Game", new GameScene()); //Add Game scene
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
+    this.mManager.setCurrentScene("Game");
   }
 
   run() {
@@ -29,13 +28,6 @@ class Game {
 
   update() {
     const dt = this.calculateDt();
-    this.ball.applyForce(0,this.gravity);
-    this.ball.update(dt);
-  }
-
-  render() {
-    this.ball.draw(this.canvas.context2D);
-
     //Update the menu manager and pass over dt
     this.mManager.update(dt);
   }
