@@ -3,9 +3,9 @@ class MainMenuScene
   constructor(){
     this.sceneEnded = false;
     this.backDrop = new Image();
-    this.backDrop.src = "./src/resources/main_menu_backdrop.png";
+    this.backDrop.src = "./src/resources/gui/main_menu_backdrop.png";
 
-    this.levelSelectBtn = new MenuButton(960, 354, "Level Select", "this.mManager.setCurrentScene('Game')");
+    this.levelSelectBtn = new MenuButton(960, 354, "Level Select", "this.mManager.setCurrentScene('Level Select')");
     this.scoreboardBtn = new MenuButton(960, 562, "Scoreboard", "this.mManager.setCurrentScene('Scoreboard')");
     this.exitGameBtn = new MenuButton(960, 770, "Exit Game", "");
 
