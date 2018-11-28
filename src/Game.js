@@ -11,10 +11,15 @@ class Game {
     this.mManager.addScene("Game", new GameScene()); //Add Game scene
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
+    this.mManager.setFadeSpeed(500); //Set fade out/in to .5 seconds
     this.mManager.fadeTo("Main Menu"); //Set it to fade to main menu from splash
 
     //Create a new keyboard, this will be used to switch scenes FOR NOW
     this.keyboard = new Keyboard();
+
+    //Creating a bind for the click event, other click events will still work
+    //But this one is for handling the clicking of buttons
+    window.addEventListener("click", this.menuClickHandler.bind(this));
   }
 
   run() {
@@ -50,6 +55,21 @@ class Game {
     }
     if(this.keyboard.isButtonPressed("5")){
       this.mManager.setCurrentScene("Scoreboard");
+    }
+  }
+
+  menuClickHandler()
+  {
+    //If the scene has a method called checkButtonClick
+    if(typeof this.mManager.current.value.checkButtonClick === 'function')
+    {
+      var returned = this.mManager.current.value.checkButtonClick();
+      //If the first item return is true, then change our scene depending on
+      //button name
+      if(returned !== ""){
+        //We eval thee string to convert it to javascript code to be executed
+        eval(returned);
+      }
     }
   }
 
