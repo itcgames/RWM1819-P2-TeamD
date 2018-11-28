@@ -4,7 +4,7 @@ class LevelSelectScene
     this.sceneEnded = false;
   }
 
-  update(ctx){
+  update(dt){
 
   }
 
