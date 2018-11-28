@@ -4,7 +4,7 @@ class SplashScene
     this.sceneEnded = false;
   }
 
-  update(ctx){
+  update(dt){
 
   }
 

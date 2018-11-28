@@ -2,7 +2,7 @@
 class Game {
   constructor() {
     this.prevDt = Date.now();
-    this.canvas = new Canvas("main-canvas");
+    this.canvas = new Canvas("main-canvas", 1920, 1080);
 
     //Creating the Menu Manager
     this.mManager = new MenuManager();
@@ -11,7 +11,9 @@ class Game {
     this.mManager.addScene("Game", new GameScene()); //Add Game scene
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
-    this.mManager.setCurrentScene("Game");
+    this.mManager.setCurrentScene("Main Menu");
+
+    this.keyboard = new Keyboard();
   }
 
   run() {
@@ -30,6 +32,24 @@ class Game {
     const dt = this.calculateDt();
     //Update the menu manager and pass over dt
     this.mManager.update(dt);
+
+    //Change scene based on keyboard input
+    //this is temporary while we debug
+    if(this.keyboard.isButtonPressed("1")){
+      this.mManager.setCurrentScene("Splash");
+    }
+    if(this.keyboard.isButtonPressed("2")){
+      this.mManager.setCurrentScene("Main Menu");
+    }
+    if(this.keyboard.isButtonPressed("3")){
+      this.mManager.setCurrentScene("Level Select");
+    }
+    if(this.keyboard.isButtonPressed("4")){
+      this.mManager.setCurrentScene("Game");
+    }
+    if(this.keyboard.isButtonPressed("5")){
+      this.mManager.setCurrentScene("Scoreboard");
+    }
   }
 
   render() {

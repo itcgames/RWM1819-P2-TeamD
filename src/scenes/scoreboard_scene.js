@@ -4,7 +4,7 @@ class ScoreboardScene
     this.sceneEnded = false;
   }
 
-  update(ctx){
+  update(dt){
 
   }
 
