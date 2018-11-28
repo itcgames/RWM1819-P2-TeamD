@@ -1,12 +1,8 @@
+
 class Game {
   constructor() {
     this.prevDt = Date.now();
     this.canvas = new Canvas("main-canvas");
-    console.log(collisionManager);
-    console.log(Animation);
-    console.log(AnimationManager);
-    console.log(DragDrop);
-    console.log(MenuManager);
 
     //Creating the Menu Manager
     this.mManager = new MenuManager();
@@ -15,6 +11,7 @@ class Game {
     this.mManager.addScene("Game", new GameScene()); //Add Game scene
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
+    this.mManager.setCurrentScene("Game");
   }
 
   run() {
@@ -31,7 +28,6 @@ class Game {
 
   update() {
     const dt = this.calculateDt();
-
     //Update the menu manager and pass over dt
     this.mManager.update(dt);
   }
