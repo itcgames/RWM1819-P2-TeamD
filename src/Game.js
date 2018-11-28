@@ -11,8 +11,9 @@ class Game {
     this.mManager.addScene("Game", new GameScene()); //Add Game scene
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
-    this.mManager.setCurrentScene("Main Menu");
+    this.mManager.fadeTo("Main Menu"); //Set it to fade to main menu from splash
 
+    //Create a new keyboard, this will be used to switch scenes FOR NOW
     this.keyboard = new Keyboard();
   }
 
