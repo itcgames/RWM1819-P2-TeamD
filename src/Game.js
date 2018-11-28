@@ -1,12 +1,10 @@
+
 class Game {
   constructor() {
     this.prevDt = Date.now();
     this.canvas = new Canvas("main-canvas");
-    console.log(collisionManager);
-    console.log(Animation);
-    console.log(AnimationManager);
-    console.log(DragDrop);
-    console.log(MenuManager);
+    this.gravity = 9.8;
+    this.ball = new Ball(100,100);
   }
 
   run() {
@@ -23,10 +21,12 @@ class Game {
 
   update() {
     const dt = this.calculateDt();
+    this.ball.update(dt);
   }
 
   render() {
     this.canvas.clear();
+    this.ball.draw(this.canvas.context2D);
   }
 
   calculateDt() {
