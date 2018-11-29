@@ -15,21 +15,32 @@ class UI
     //The y position of our dragging backdrop
     this.dragBackdropY = -75;
 
-    //Our collider for th ebackdrop, this will be used for returning items to the bag
+    //Our collider for the backdrop, this will be used for returning items to the bag
     this.dragBackDropCollider = new Square(0,0, 1920, 75);
 
-    this.flatBoxCollider = new Square(209, 0, 209, 75); //Where we check for clicks on ui bar
+    //Our colliders for spawning items
+    this.boxCollider = new Square(209, 0, 209, 75); //Big block
+    this.floorCollider = new Square(418, 0, 209, 75); //Floor block
+    this.zCollider = new Square(627, 0, 209, 75); //Z block
+    this.fanCollider = new Square(836, 0, 209, 75); //Fan
+    this.springCollider = new Square(1045, 0, 209, 75); //Spring
+    this.gravCollider = new Square(1254, 0, 209, 75); //Gravity obelisk
+
     this.flatBox = new Square(0,0, 100, 50);
 
     this.objDragging = undefined;
 
     this.dnd = new DragDrop();
 
+    //Bind events for the drag and drop
     window.addEventListener("mousedown", this.mouseDown.bind(this));
     window.addEventListener("mouseup", this.mouseUp.bind(this));
 
-    this.colliders = [this.flatBoxCollider];
-    this.boxes = [];
+    //Add our spawn colliders to our list
+    this.colliders = [this.boxCollider, this.floorCollider, this.zCollider,
+    this.fanCollider, this.springCollider, this.gravCollider];
+    //Holds 
+    this.items = [];
     this.lastDragged = undefined;
   }
 
@@ -39,36 +50,54 @@ class UI
     {
       this.dragging = true; //Set dragging to true
       var box = new Square(this.dnd.mouseX - 50, this.dnd.mouseY - 25,100, 50);
-      this.boxes.push(box);
+      this.items.push(box);
       this.dnd.addDraggable(box);
+      this.lastDragged = box;
       return true;
     }
     return false;
   }
 
   mouseDown(e){
+    var isDragged = false;
     for(var i in this.colliders){
       if(this.checkDraggable(this.colliders[i])){
+        isDragged = true;
         break;
       }
     }
+
+    //If the spawn colliders were not clicked, check if we
+    //are dragging an already spawned object
+    if(isDragged === false)
+    {
+      for(var i in this.items){
+        if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i])){
+          this.dragging = true;
+          this.lastDragged = this.items[i];
+          break;
+        }
+      }
+    }
+
 
     
     this.dnd.dragstart(e);
   }
 
   mouseUp(e){
-    //If we dropped on the ui bar then remove the item back to our bags
-    if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider))
-    {
-      //this.dnd.removeTargetDraggable();
+    if(this.dragging){
+      //If we dropped on the ui bar then remove the item back to our bags
+      if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider)){
+          this.dnd.removeTargetDraggable(this.lastDragged);
+          var indexToDel = this.items.indexOf(this.lastDragged); //Get the index to delete
+          this.items.splice(indexToDel, 1); //Remove the last dragged item from the rectangle
+      }
     }
-
-
     //Call drag end of drag and drop
     this.dnd.dragend(e);
 
-    //Set tto false
+    //Set to false
     this.dragging = false;
   }
 
@@ -103,9 +132,9 @@ class UI
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
     //Draw all of the boxes we have created
-    for(var index in this.boxes)
+    for(var index in this.items)
     {
-      this.boxes[index].render(ctx);
+      this.items[index].render(ctx);
     }
   }
 }
