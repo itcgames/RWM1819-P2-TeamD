@@ -16,6 +16,8 @@ class GameScene {
     this.floorBlock = new FloorBlock(900, 300);
     this.zBlock = new Zblock(900, 600);
 
+    //The ui bar
+    this.ui = new UI();
   }
 
   /**
@@ -51,6 +53,10 @@ class GameScene {
     this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
+    
+    //Update UI
+    this.ui.update(dt);
+    
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
   }
@@ -70,6 +76,9 @@ class GameScene {
     this.floorBlock.draw(ctx);
     this.zBlock.draw(ctx);
     this.ball.draw(ctx);
+    
+    //Draw the Ui on top of everything else
+    this.ui.draw(ctx);
     // this.spring.draw(ctx);
   }
 }
