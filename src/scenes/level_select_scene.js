@@ -21,8 +21,7 @@ class LevelSelectScene
 
   }
 
-  checkButtonClick()
-  {
+  checkButtonClick(){
     //Loop through our buttons
     for(let btn of this.btns){
       if(btn.mouseClicked()){ //If the button was clicked

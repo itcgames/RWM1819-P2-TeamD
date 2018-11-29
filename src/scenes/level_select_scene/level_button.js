@@ -1,8 +1,7 @@
 class LevelButton
 {
   //Takes in thee rectangle of the image for this button
-  constructor(x, y, imageRect)
-  {
+  constructor(x, y, imageRect){
     this.highlighted = false;
     this.highlightedImg = new Image();
     this.highlightedImg.src = "./src/resources/gui/level_highlight.png"
@@ -23,8 +22,7 @@ class LevelButton
   }
   //Is called when the mouse moves, we will check
   //if the mouse is hovering on our button
-  mouseClicked()
-  {
+  mouseClicked(){
     //If we are highlighted and we clicked, return true
     if(this.highlighted){
       return true
@@ -36,8 +34,7 @@ class LevelButton
 
   //Is called when the mouse moves, we will check
   //if the mouse is hovering on our button
-  mouseMoved(e)
-  {
+  mouseMoved(e){
     //Construct a very small rectangle on the mouse position
     var mouseRect = {x: e.clientX - 5, y: e.clientY - 5, width: 2, height: 2};
 
@@ -57,8 +54,7 @@ class LevelButton
     }
     return false;
   }
-  draw(ctx)
-  {
+  draw(ctx){
     //Draw our level select icon for this level
     ctx.drawImage(this.btnBg, this.srcRect.x, this.srcRect.y, this.srcRect.w, this.srcRect.h,
       this.rect.x, this.rect.y, this.rect.width, this.rect.height);
