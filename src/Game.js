@@ -12,7 +12,7 @@ class Game {
     this.mManager.addScene("Scoreboard", new ScoreboardScene()); //Add Scoreboard
     this.mManager.addScene("Level Select", new LevelSelectScene()); //Add level select
     this.mManager.setFadeSpeed(500); //Set fade out/in to .5 seconds
-    this.mManager.fadeTo("Game"); //Set it to fade to main menu from splash
+    this.mManager.fadeTo("Main Menu"); //Set it to fade to main menu from splash
 
     //Create a new keyboard, this will be used to switch scenes FOR NOW
     this.keyboard = new Keyboard();
