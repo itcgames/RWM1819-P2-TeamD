@@ -12,6 +12,10 @@ class GameScene {
     this.items = [];
     this.springImage.src = "./src/resources/spring_anim.png";
     this.keyboard = new Keyboard();
+    this.block  = new Block(300,300);
+    this.floorBlock = new FloorBlock(900, 300);
+    this.zBlock = new Zblock(900, 600);
+
   }
 
   /**
@@ -46,6 +50,9 @@ class GameScene {
     
     this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
+    this.block.update(dt);
+    this.floorBlock.update(dt);
+    this.zBlock.update(dt);
   }
 
   /**
@@ -59,6 +66,9 @@ class GameScene {
     for(var i in this.items){
       this.items[i].draw(ctx);
     }
+    this.block.draw(ctx);
+    this.floorBlock.draw(ctx);
+    this.zBlock.draw(ctx);
     this.ball.draw(ctx);
     // this.spring.draw(ctx);
   }

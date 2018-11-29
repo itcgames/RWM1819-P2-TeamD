@@ -2,7 +2,7 @@ class MenuButton
 {
   constructor(x, y, string, action){
     this.btnBg = new Image(); //Create our buttons background image
-    this.btnBg.src = "./src/resources/menu_button_bg.png"
+    this.btnBg.src = "./src/resources/gui/menu_button_bg.png"
     this.text = new Text(string); //Setup a new text object with the string
     this.x = x; //The x position of the background button
     this.y = y; //The x position of the background button
