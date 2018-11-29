@@ -31,19 +31,19 @@ class GameScene {
       if(this.items[i] instanceof Spring){
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.applyForce(0,-10);
+            this.ball.impulse(0,-10);
 	          this.ball.position.y -= this.ball.radius;
           }
           else if(this.items[i].angle === 90){
-            this.ball.velocity.x = 10;
+            this.ball.impulse(10,0);
             this.ball.position.x += this.ball.radius;
           }
           else if(this.items[i].angle === 180){
-            this.ball.velocity.y = 10;
+            this.ball.impulse(0,10);
             this.ball.position.y += this.ball.radius;
           }
           else{
-            this.ball.velocity.x = -10;
+            this.ball.impulse(-10,0);
             this.ball.position.x -= this.ball.radius;
           }
           this.items[i].bounce();
@@ -52,7 +52,6 @@ class GameScene {
       }
     }
     
-    this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
     
