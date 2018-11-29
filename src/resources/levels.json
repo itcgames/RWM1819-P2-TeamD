@@ -1,0 +1,15 @@
+[
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 30 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 30 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        }
+    }
+]
