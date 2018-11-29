@@ -7,7 +7,7 @@ class GameScene {
     //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
     this.springImage.addEventListener('load', function () {
-      that.items.push(new Spring(50, 300, that.springImage));
+      that.items.push(new Spring(50, 600, that.springImage));
     });
     this.items = [];
     this.springImage.src = "./src/resources/spring_anim.png";
@@ -31,23 +31,25 @@ class GameScene {
       if(this.items[i] instanceof Spring){
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.impulse(0, -3);
+            this.ball.velocity.y = -10;
+	          this.ball.position.y -= this.ball.radius;
           }
           else if(this.items[i].angle === 90){
-            this.ball.impulse(3, 0);
+            this.ball.velocity.x = 10;
+            this.ball.position.x += this.ball.radius;
           }
           else if(this.items[i].angle === 180){
-            this.ball.impulse(0,3);
+            this.ball.velocity.y = 10;
+            this.ball.position.y += this.ball.radius;
           }
           else{
-            this.ball.impulse(-3,0);
+            this.ball.velocity.x = -10;
+            this.ball.position.x -= this.ball.radius;
           }
           this.items[i].bounce();
         }
         this.items[i].update(dt);
       }
-
-
     }
     
     this.ball.applyForce(0, this.gravity);

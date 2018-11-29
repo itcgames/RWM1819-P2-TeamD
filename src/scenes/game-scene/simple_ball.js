@@ -24,7 +24,7 @@ class Ball {
       y: 0
     };
     this.radius = 25;
-    this.mass = 0.01;
+    this.mass = 1;
     this.restitution = -0.7;
     this.maxVel = 3;
     this.maxAcc = 1;
@@ -35,6 +35,12 @@ class Ball {
       },
       radius: this.radius
     };
+
+
+    this.cd = 0.47;  // Dimensionless
+    this.rho = 1.22; // kg / m^3
+    this.a = Math.PI * this.radius * this.radius / (10000); // m^2
+    this.ag = 9.81;  // m / s^2
   }
   /**
    * This function will do all logic updates
@@ -43,23 +49,23 @@ class Ball {
    * time in ms since last update
    */
   update(dt) {
-    this.velocity.x += this.acceleration.x;
-    this.velocity.y += this.acceleration.y;
+    var Fx = -0.5 * this.cd * this.a * this.rho * this.velocity.x * this.velocity.x * this.velocity.x / Math.abs(this.velocity.x);
+    var Fy = -0.5 * this.cd * this.a * this.rho * this.velocity.y * this.velocity.y * this.velocity.y / Math.abs(this.velocity.y);
 
-    //calculate length of the velocity
-    var velLen = Math.sqrt(
-      Math.pow(this.velocity.x, 2) +
-      Math.pow(this.velocity.y, 2)
-    );
-    //clamp velocity at max if its above max.
-    if (velLen > this.maxVel) {
-      this.velocity.x /= velLen;
-      this.velocity.y /= velLen;
-    }
-    this.position.x += this.velocity.x * dt;
-    this.position.y += this.velocity.y * dt;
+    Fx = (isNaN(Fx) ? 0 : Fx);
+    Fy = (isNaN(Fy) ? 0 : Fy);
+
+    // Calculate acceleration ( F = ma )
+    var ax = Fx / this.mass;
+    var ay = this.ag + (Fy / this.mass);
+    // Integrate to get velocity
+    this.velocity.x += ax * (dt / 1000);
+    this.velocity.y += ay * (dt / 1000);
+
+    // Integrate to get position
+    this.position.x += this.velocity.x * (dt / 1000) * 100;
+    this.position.y += this.velocity.y * (dt / 1000) * 100;
     this.updateCollisionCircle();
-    //console.log(this.velocity.x + "     " + this.velocity.y);
   }
 
   /**
@@ -121,15 +127,8 @@ class Ball {
    * @param {number} yForce 
    * force to be applied on the y axis.
    */
-  impulse(xForce, yForce){
+  impulse(xForce, yForce) {
     this.velocity.x += xForce;
     this.velocity.y += yForce;
-    if(this.xForce){
-      this.acceleration.x = 0;
-    }
-    else if(this.yForce){
-      this.acceleration.y = 0;
-    }
-    
   }
 }
