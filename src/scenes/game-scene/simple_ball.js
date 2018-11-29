@@ -26,8 +26,15 @@ class Ball {
     this.radius = 25;
     this.mass = 0.01;
     this.restitution = -0.7;
-    this.maxVel = 1;
-    this.maxAcc = 100;
+    this.maxVel = 3;
+    this.maxAcc = 1;
+    this.collisionCircle = {
+      position: {
+        x: this.position.x,
+        y: this.position.y
+      },
+      radius: this.radius
+    };
   }
   /**
    * This function will do all logic updates
@@ -36,22 +43,23 @@ class Ball {
    * time in ms since last update
    */
   update(dt) {
-      this.velocity.x += this.acceleration.x;
-      this.velocity.y += this.acceleration.y;
+    this.velocity.x += this.acceleration.x;
+    this.velocity.y += this.acceleration.y;
 
-      //calculate length of the velocity
-      var velLen = Math.sqrt(
-          Math.pow(this.velocity.x, 2) +
-          Math.pow(this.velocity.y, 2)
-          );
-      //clamp velocity at max if its above max.
-      if(velLen > this.maxVel)
-      {
-        this.velocity.x /= velLen;
-        this.velocity.y /= velLen;
-      }
-      this.position.x += this.velocity.x * dt;
-      this.position.y += this.velocity.y * dt;
+    //calculate length of the velocity
+    var velLen = Math.sqrt(
+      Math.pow(this.velocity.x, 2) +
+      Math.pow(this.velocity.y, 2)
+    );
+    //clamp velocity at max if its above max.
+    if (velLen > this.maxVel) {
+      this.velocity.x /= velLen;
+      this.velocity.y /= velLen;
+    }
+    this.position.x += this.velocity.x * dt;
+    this.position.y += this.velocity.y * dt;
+    this.updateCollisionCircle();
+    //console.log(this.velocity.x + "     " + this.velocity.y);
   }
 
   /**
@@ -81,10 +89,47 @@ class Ball {
    * Force acting in the y axis
    * where up is positive down is negative
    */
-  applyForce(xForce, yForce){
-      this.acceleration.x += xForce;
-      this.acceleration.y += yForce;
+  applyForce(xForce, yForce) {
+    this.acceleration.x += xForce;
+    this.acceleration.y += yForce;
+    //calculate length of the velocity
+    var accLen = Math.sqrt(
+      Math.pow(this.acceleration.x, 2) +
+      Math.pow(this.acceleration.y, 2)
+    );
+    //clamp velocity at max if its above max.
+    if (accLen > this.maxAcc) {
+      this.acceleration.x /= accLen;
+      this.acceleration.y /= accLen;
+    }
   }
 
+  /**
+   * This method will update the collision circles position
+   * based on the position of the ball.
+   */
+  updateCollisionCircle() {
+    this.collisionCircle.position.x = this.position.x;
+    this.collisionCircle.position.y = this.position.y;
+  }
 
+  /**
+   * This method will apply an impulse force 
+   * to the ball.
+   * @param {number} xForce 
+   * force to be applied on the x axis.
+   * @param {number} yForce 
+   * force to be applied on the y axis.
+   */
+  impulse(xForce, yForce){
+    this.velocity.x += xForce;
+    this.velocity.y += yForce;
+    if(this.xForce){
+      this.acceleration.x = 0;
+    }
+    else if(this.yForce){
+      this.acceleration.y = 0;
+    }
+    
+  }
 }
