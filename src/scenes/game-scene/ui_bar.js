@@ -1,8 +1,7 @@
-class UI 
-{
+class UI {
   constructor() {
     //Ui Backdrop showing all the items
-    this.uiBackdrop = new Image(); 
+    this.uiBackdrop = new Image();
     this.uiBackdrop.src = "./src/resources/gui/ui_bar.png";
 
     //The ui backdrop while dragging
@@ -16,7 +15,7 @@ class UI
     this.dragBackdropY = -75;
 
     //Our collider for the backdrop, this will be used for returning items to the bag
-    this.dragBackDropCollider = new Square(0,0, 1920, 75);
+    this.dragBackDropCollider = new Square(0, 0, 1920, 75);
 
     //Our colliders for spawning items
     this.boxCollider = new Square(209, 0, 209, 75); //Big block
@@ -26,7 +25,7 @@ class UI
     this.springCollider = new Square(1045, 0, 209, 75); //Spring
     this.gravCollider = new Square(1254, 0, 209, 75); //Gravity obelisk
 
-    this.flatBox = new Square(0,0, 100, 50);
+    this.flatBox = new Square(0, 0, 100, 50);
 
     this.objDragging = undefined;
 
@@ -44,12 +43,10 @@ class UI
     this.lastDragged = undefined;
   }
 
-  checkDraggable(rect)
-  {
-    if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect))
-    {
+  checkDraggable(rect) {
+    if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect)) {
       this.dragging = true; //Set dragging to true
-      var box = new Square(this.dnd.mouseX - 50, this.dnd.mouseY - 25,100, 50);
+      var box = new Square(this.dnd.mouseX - 50, this.dnd.mouseY - 25, 100, 50);
       this.items.push(box);
       this.dnd.addDraggable(box);
       this.lastDragged = box;
@@ -58,10 +55,10 @@ class UI
     return false;
   }
 
-  mouseDown(e){
+  mouseDown(e) {
     var isDragged = false;
-    for(var i in this.colliders){
-      if(this.checkDraggable(this.colliders[i])){
+    for (var i in this.colliders) {
+      if (this.checkDraggable(this.colliders[i])) {
         isDragged = true;
         break;
       }
@@ -69,10 +66,9 @@ class UI
 
     //If the spawn colliders were not clicked, check if we
     //are dragging an already spawned object
-    if(isDragged === false)
-    {
-      for(var i in this.items){
-        if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i])){
+    if (isDragged === false) {
+      for (var i in this.items) {
+        if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i])) {
           this.dragging = true;
           this.lastDragged = this.items[i];
           break;
@@ -81,17 +77,31 @@ class UI
     }
 
 
-    
+
     this.dnd.dragstart(e);
   }
 
-  mouseUp(e){
-    if(this.dragging){
+  mouseUp(e) {
+    if (this.dragging) {
+      var deleteObj = false;
       //If we dropped on the ui bar then remove the item back to our bags
-      if(this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider)){
-          this.dnd.removeTargetDraggable(this.lastDragged);
-          var indexToDel = this.items.indexOf(this.lastDragged); //Get the index to delete
-          this.items.splice(indexToDel, 1); //Remove the last dragged item from the rectangle
+      if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider)) {
+        deleteObj = true;
+      }
+
+      for (var i in this.items) {
+        if (this.items[i] != this.lastDragged) {
+          if (this.dnd.haveIntersection(this.lastDragged, this.items[i])) {
+            deleteObj = true;
+          }
+        }
+      }
+
+
+      if (deleteObj) {
+        this.dnd.removeTargetDraggable(this.lastDragged);
+        var indexToDel = this.items.indexOf(this.lastDragged); //Get the index to delete
+        this.items.splice(indexToDel, 1); //Remove the last dragged item from the rectangle
       }
     }
     //Call drag end of drag and drop
@@ -101,39 +111,38 @@ class UI
     this.dragging = false;
   }
 
-  update(dt){
+  update(dt) {
     //Update drag and drop to move dragged items
     this.dnd.update();
 
     //If we are dragging
-    if(this.dragging){
+    if (this.dragging) {
       //And our ui backdrop is above, then move it down
-      if(this.dragBackdropY !== 0){
+      if (this.dragBackdropY !== 0) {
         this.dragBackdropY = this.lerp(this.dragBackdropY, 0, .25);
       }
     }
     //If we are not dragging
-    else{
+    else {
       //And our ui backdrop is below, then move it up
-      if(this.dragBackdropY !== 0){
+      if (this.dragBackdropY !== 0) {
         this.dragBackdropY = this.lerp(this.dragBackdropY, -75, .25);
       }
     }
   }
 
   //Simple lerp function
-  lerp(start, end, dt){
-    return (start + dt*(end - start));
+  lerp(start, end, dt) {
+    return (start + dt * (end - start));
   }
 
-  draw(ctx){
+  draw(ctx) {
     //Draw our backdrops
     ctx.drawImage(this.uiBackdrop, 0, 0);
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
     //Draw all of the boxes we have created
-    for(var index in this.items)
-    {
+    for (var index in this.items) {
       this.items[index].render(ctx);
     }
   }
