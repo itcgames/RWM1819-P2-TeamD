@@ -5,12 +5,17 @@ class GameScene {
     this.ball = new Ball(100, 100);
     this.block  = new Block(300,300);
 
+    //The ui bar
+    this.ui = new UI();
   }
 
   update(dt) {
     this.ball.applyForce(0,this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
+
+    //Update UI
+    this.ui.update(dt);
   }
 
   draw(ctx) {
@@ -18,5 +23,8 @@ class GameScene {
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     this.block.draw(ctx);
     this.ball.draw(ctx);
+
+    //Draw the Ui on top of everything else
+    this.ui.draw(ctx);
   }
 }
