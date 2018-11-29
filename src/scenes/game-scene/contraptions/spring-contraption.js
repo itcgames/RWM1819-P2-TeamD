@@ -23,9 +23,7 @@ class Spring {
       height: 30
     }
     //Rectangle for Drag and drop and x, y. Without these we cant move spring
-    this.rect = {x:posX, y:posY, width: this.size.width, height: this.size.height };
-    this.x = posX;
-    this.y = posY;
+    this.rect = new Square(posX, posY, 100, 30);
 
     this.points = {
       top_left: {
@@ -76,8 +74,14 @@ class Spring {
    * time in ms since last update
    */
   update(dt) {
-    this.position.x = this.x;
-    this.position.y = this.y;
+    this.position.x = this.rect.x;
+    this.position.y = this.rect.y;
+
+    //Update circle collision box, this is necessary for drag and drop
+    this.collisionCircle.position.x = this.position.x + (this.size.width / 2);
+    this.collisionCircle.position.y = this.position.y + 10;
+
+
     this.springAnimator.update(dt, this.position.x + (this.size.width / 2), this.position.y);
   }
 

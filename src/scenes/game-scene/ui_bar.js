@@ -1,7 +1,7 @@
 class UI {
   constructor() {
     //our text positions for the amount of items available
-    this.textPositions = [[220,15], [429, 15], [638, 15], [847, 15], [1056, 15], [1265, 15]];
+    this.textPositions = [[220,17], [429, 17], [638, 17], [847, 17], [1056, 17], [1265, 17]];
     this.itemsAvailable = [3, 2, 4, 1, 1, 1];
 
     //Ui Backdrop showing all the items
@@ -55,23 +55,43 @@ class UI {
 
   checkDraggable(rect) {
     if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect)) {
-      if(rect == this.springCollider){
-        this.dragging = true; //Set dragging to true
-        var item;
-        item = new Spring(this.dnd.mouseX - (this.springImage.width / 2),this.dnd.mouseY - (this.springImage.height / 2), this.springImage);
-        this.items.push(item);
-        this.dnd.addDraggable(item);
-        this.lastDragged = item;
-        return true;
+      this.dragging = true; //Set dragging to true
+      var item;
+      if(rect == this.springCollider){ //Spawn spring object
+        item = new Spring(this.dnd.mouseX - 50, this.dnd.mouseY - 15, this.springImage);
       }
+      if(rect == this.boxCollider){
+        item = new Block(this.dnd.mouseX - 50, this.dnd.mouseY - 50);
+      }
+      if(rect == this.floorCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30);
+      }
+      if(rect == this.zCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a z block
+      }
+      if(rect == this.fanCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a Fan
+      }
+      if(rect == this.gravCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a gravity block thingy
+      }
+
+      //Add to our items vector
+      this.items.push(item);
+      //Push the items rectangle into the rag and drop
+      this.dnd.addDraggable(item.rect);
+      this.lastDragged = item;
+      return true;
     }
     return false;
   }
 
   mouseDown(e) {
     var isDragged = false;
+    //Check if we clicked a spawn collider
     for (var i in this.colliders) {
-      if (this.checkDraggable(this.colliders[i])) {
+      if (this.itemsAvailable[i] > 0 && this.checkDraggable(this.colliders[i])) {
+        this.itemsAvailable[i]--;
         isDragged = true;
         break;
       }
@@ -98,7 +118,7 @@ class UI {
     if (this.dragging) {
       var deleteObj = false;
       //If we dropped on the ui bar then remove the item back to our bags
-      if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider)) {
+      if (this.dnd.haveIntersection(this.lastDragged.rect, this.dragBackDropCollider)) {
         deleteObj = true;
       }
 
@@ -114,9 +134,27 @@ class UI {
 
 
       if (deleteObj) {
+        //Check what type of object it is and increase the amount we have on our ui
+        if(this.lastDragged instanceof Spring){
+          this.itemsAvailable[4]++;
+        }
+        else if(this.lastDragged instanceof FloorBlock){
+          this.itemsAvailable[1]++;
+        }
+        else if(this.lastDragged instanceof Block){
+          this.itemsAvailable[0]++;
+        }
+        else if(this.lastDragged instanceof Zblock){
+          this.itemsAvailable[2]++;
+        }
+
+        //Need the other classes complete to add the last ones
+
+
         this.dnd.removeTargetDraggable(this.lastDragged);
         var indexToDel = this.items.indexOf(this.lastDragged); //Get the index to delete
         this.items.splice(indexToDel, 1); //Remove the last dragged item from the rectangle
+        this.lastDragged = undefined;
       }
     }
     //Call drag end of drag and drop
@@ -173,6 +211,5 @@ class UI {
     for (var index in this.items) {
       this.items[index].draw(ctx);
     }
-
   }
 }

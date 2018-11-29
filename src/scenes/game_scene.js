@@ -3,21 +3,12 @@ class GameScene {
     this.sceneEnded = false;
     this.gravity = 0.008;
     this.ball = new Ball(100, 100);
-    this.springImage = new Image();
-    //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
-    this.springImage.addEventListener('load', function () {
-      that.items.push(new Spring(50, 600, that.springImage));
-    });
-    this.springImage.src = "./src/resources/spring_anim.png";
+    
     this.keyboard = new Keyboard();
-    this.block  = new Block(300,300);
-    this.floorBlock = new FloorBlock(900, 300);
-    this.zBlock = new Zblock(900, 600);
 
     //The ui bar
     this.ui = new UI();
-
     //Keep a reference to the items spawned by the UI/Drag and drop
     this.items = this.ui.items;
     //The toolbar object
@@ -55,15 +46,12 @@ class GameScene {
           }
           this.items[i].bounce();
         }
-        this.items[i].update(dt);
       }
+      //we should be updating all items here, regardless of what they are
+      this.items[i].update(dt);
     }
     
     this.ball.update(dt);
-    this.block.update(dt);
-
-    this.floorBlock.update(dt);
-    this.zBlock.update(dt);
 
     //Update UI
     this.ui.update(dt);
@@ -106,9 +94,7 @@ class GameScene {
     for(var i in this.items){
       this.items[i].draw(ctx);
     }
-    this.block.draw(ctx);
-    this.floorBlock.draw(ctx);
-    this.zBlock.draw(ctx);
+
     this.ball.draw(ctx);
     
     //Draw the Ui on top of everything else
