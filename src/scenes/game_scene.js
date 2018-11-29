@@ -7,6 +7,8 @@ class GameScene {
     this.floorBlock = new FloorBlock(900, 300);
     this.zBlock = new Zblock(900, 600);
 
+    //The ui bar
+    this.ui = new UI();
   }
 
   update(dt) {
@@ -15,6 +17,9 @@ class GameScene {
     this.block.update(dt);
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
+
+    //Update UI
+    this.ui.update(dt);
   }
 
   draw(ctx) {
@@ -24,5 +29,8 @@ class GameScene {
     this.floorBlock.draw(ctx);
     this.zBlock.draw(ctx);
     this.ball.draw(ctx);
+
+    //Draw the Ui on top of everything else
+    this.ui.draw(ctx);
   }
 }
