@@ -69,8 +69,9 @@ class SoundManager {
       this.globalVolumeNode.connect(this.audioContext.destination);
 
       const FILE_PATH = "filepath";
+      const VOLUME = "volume";
       for (let soundName in soundData) {
-        this.loadSoundFile(soundName, soundData[soundName][FILE_PATH]);
+        this.loadSoundFile(soundName, soundData[soundName][FILE_PATH], soundData[soundName][VOLUME]);
       }
     }
     catch (error) {
