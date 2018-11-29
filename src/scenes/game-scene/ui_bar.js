@@ -1,6 +1,10 @@
 class UI 
 {
   constructor() {
+    //our text positions for the amount of items available
+    this.textPositions = [[220,15], [429, 15], [638, 15], [847, 15], [1056, 15], [1265, 15]];
+    this.itemsAvailable = [3, 2, 4, 1, 1, 1];
+
     //Ui Backdrop showing all the items
     this.uiBackdrop = new Image(); 
     this.uiBackdrop.src = "./src/resources/gui/ui_bar.png";
@@ -39,8 +43,9 @@ class UI
     //Add our spawn colliders to our list
     this.colliders = [this.boxCollider, this.floorCollider, this.zCollider,
     this.fanCollider, this.springCollider, this.gravCollider];
-    //Holds 
+    //Holds all of the items in the game, there will be none at the start as the player will have to
     this.items = [];
+    //The index of the last item dragged
     this.lastDragged = undefined;
   }
 
@@ -129,6 +134,14 @@ class UI
   draw(ctx){
     //Draw our backdrops
     ctx.drawImage(this.uiBackdrop, 0, 0);
+    //Draw all of our items left indicatiors
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#000000";
+    ctx.font="20px Berlin Sans";
+    //Loop through our text positions
+    for(var i in this.textPositions){
+      ctx.fillText("x" + this.itemsAvailable[i].toString(), this.textPositions[i][0], this.textPositions[i][1]);
+    }
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
     //Draw all of the boxes we have created
@@ -136,5 +149,6 @@ class UI
     {
       this.items[index].render(ctx);
     }
+
   }
 }
