@@ -31,7 +31,7 @@ class GameScene {
       if(this.items[i] instanceof Spring){
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.velocity.y = -10;
+            this.ball.applyForce(0,-10);
 	          this.ball.position.y -= this.ball.radius;
           }
           else if(this.items[i].angle === 90){

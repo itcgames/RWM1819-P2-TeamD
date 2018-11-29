@@ -96,18 +96,8 @@ class Ball {
    * where up is positive down is negative
    */
   applyForce(xForce, yForce) {
-    this.acceleration.x += xForce;
-    this.acceleration.y += yForce;
-    //calculate length of the velocity
-    var accLen = Math.sqrt(
-      Math.pow(this.acceleration.x, 2) +
-      Math.pow(this.acceleration.y, 2)
-    );
-    //clamp velocity at max if its above max.
-    if (accLen > this.maxAcc) {
-      this.acceleration.x /= accLen;
-      this.acceleration.y /= accLen;
-    }
+    this.velocity.x += xForce;
+    this.velocity.y += yForce;
   }
 
   /**
