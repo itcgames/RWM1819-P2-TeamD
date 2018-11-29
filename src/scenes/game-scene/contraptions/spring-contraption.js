@@ -12,6 +12,8 @@ class Spring {
    * @param {Image} spriteSheet sprite sheet of the spring
    */
   constructor(posX, posY, spriteSheet) {
+
+
     this.position = {
       x: posX,
       y: posY
@@ -20,6 +22,11 @@ class Spring {
       width: 100,
       height: 30
     }
+    //Rectangle for Drag and drop and x, y. Without these we cant move spring
+    this.rect = {x:posX, y:posY, width: this.size.width, height: this.size.height };
+    this.x = posX;
+    this.y = posY;
+
     this.points = {
       top_left: {
         x: this.position.x,
@@ -69,6 +76,8 @@ class Spring {
    * time in ms since last update
    */
   update(dt) {
+    this.position.x = this.x;
+    this.position.y = this.y;
     this.springAnimator.update(dt, this.position.x + (this.size.width / 2), this.position.y);
   }
 

@@ -9,7 +9,6 @@ class GameScene {
     this.springImage.addEventListener('load', function () {
       that.items.push(new Spring(50, 300, that.springImage));
     });
-    this.items = [];
     this.springImage.src = "./src/resources/spring_anim.png";
     this.keyboard = new Keyboard();
     this.block  = new Block(300,300);
@@ -18,6 +17,9 @@ class GameScene {
 
     //The ui bar
     this.ui = new UI();
+
+    //Keep a reference to the items spawned by the UI/Drag and drop
+    this.items = this.ui.items;
   }
 
   /**

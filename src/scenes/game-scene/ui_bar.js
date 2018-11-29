@@ -29,10 +29,15 @@ class UI {
     this.springCollider = new Square(1045, 0, 209, 75); //Spring
     this.gravCollider = new Square(1254, 0, 209, 75); //Gravity obelisk
 
-    this.flatBox = new Square(0, 0, 100, 50);
+    //The spring image
+    this.springImage = new Image();
+    //The spring image source
+    this.springImage.src = "./src/resources/spring_anim.png";
 
+    //The object we are currently dragging
     this.objDragging = undefined;
 
+    //Create the drag and dropper
     this.dnd = new DragDrop();
 
     //Bind events for the drag and drop
@@ -50,12 +55,15 @@ class UI {
 
   checkDraggable(rect) {
     if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect)) {
-      this.dragging = true; //Set dragging to true
-      var box = new Square(this.dnd.mouseX - 50, this.dnd.mouseY - 25, 100, 50);
-      this.items.push(box);
-      this.dnd.addDraggable(box);
-      this.lastDragged = box;
-      return true;
+      if(rect == this.springCollider){
+        this.dragging = true; //Set dragging to true
+        var item;
+        item = new Spring(this.dnd.mouseX - (this.springImage.width / 2),this.dnd.mouseY - (this.springImage.height / 2), this.springImage);
+        this.items.push(item);
+        this.dnd.addDraggable(item);
+        this.lastDragged = item;
+        return true;
+      }
     }
     return false;
   }
@@ -73,7 +81,7 @@ class UI {
     //are dragging an already spawned object
     if (isDragged === false) {
       for (var i in this.items) {
-        if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i])) {
+        if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i].rect)) {
           this.dragging = true;
           this.lastDragged = this.items[i];
           break;
@@ -94,9 +102,11 @@ class UI {
         deleteObj = true;
       }
 
+      //Loop through our items
       for (var i in this.items) {
         if (this.items[i] != this.lastDragged) {
-          if (this.dnd.haveIntersection(this.lastDragged, this.items[i])) {
+          //If we have dropped an item onto another item, delete it
+          if (this.dnd.haveIntersection(this.lastDragged.rect, this.items[i].rect)) {
             deleteObj = true;
           }
         }
@@ -134,6 +144,11 @@ class UI {
         this.dragBackdropY = this.lerp(this.dragBackdropY, -75, .25);
       }
     }
+
+    //Update all of the items we have created
+    for (var index in this.items) {
+      this.items[index].update(dt);
+    }
   }
 
   //Simple lerp function
@@ -154,9 +169,9 @@ class UI {
     }
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
-    //Draw all of the boxes we have created
+    //Draw all of the items we have created
     for (var index in this.items) {
-      this.items[index].render(ctx);
+      this.items[index].draw(ctx);
     }
 
   }
