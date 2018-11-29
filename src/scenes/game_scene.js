@@ -18,6 +18,11 @@ class GameScene {
 
     //The ui bar
     this.ui = new UI();
+    //The toolbar object
+    this.toolBar = new toolbar();
+
+    //Bind events for the click, for the oolbar
+    window.addEventListener("click", this.checkToolbarClick.bind(this));
   }
 
   /**
@@ -53,12 +58,38 @@ class GameScene {
     this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
-    
-    //Update UI
-    this.ui.update(dt);
-    
+
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
+
+    //Update UI
+    this.ui.update(dt);
+  }
+
+  checkToolbarClick(e)
+  {
+    let returned = this.toolBar.checkButton(e);
+
+    if(returned === "trash")
+    {
+      console.log("Trash");
+    }
+
+    if(returned === "delete")
+    {
+      console.log("delete");
+    }
+
+    if(returned === "exit")
+    {
+      console.log("exit")
+    }
+
+    if(returned === "restart")
+    {
+      console.log("restart");
+    }
+
   }
 
   /**
