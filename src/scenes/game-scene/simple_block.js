@@ -20,6 +20,15 @@ class Block {
     //Create rect for drag and drop
     this.rect = new Square(sPosX, sPosY, 100, 100);
   }
+  
+  get aabb() {
+    return [
+      { x: this.rect.x, y: this.rect.y },
+      { x: this.rect.x + this.rect.width, y: this.rect.y },
+      { x: this.rect.x + this.rect.width, y: this.rect.y + this.rect.height },
+      { x: this.rect.x, y: this.rect.y + this.rect.height }
+    ];
+  }
 
   update(dt) {
     
