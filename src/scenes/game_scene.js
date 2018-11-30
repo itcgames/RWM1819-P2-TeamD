@@ -55,6 +55,7 @@ class GameScene {
     this.items = this.ui.items;
     //The toolbar object
     this.toolBar = new toolbar();
+    this.endGame = false;
   }
 
 
@@ -66,7 +67,7 @@ class GameScene {
     this.ball.velocity.x = 0;
     this.ball.velocity.y = 0;
     this.ballupdate = false;
-
+    this.endGame = false;
   }
 
   play() {
@@ -106,7 +107,7 @@ class GameScene {
       item.update(dt);
     }, this);
     this.ball.update(dt);
-    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
 
 
     //Update timer
