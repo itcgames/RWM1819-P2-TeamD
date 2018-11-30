@@ -13,3 +13,6 @@
 [submodule "lib/RWM1819-Input-B"]
 	path = lib/RWM1819-Input-B
 	url = https://github.com/itcgames/RWM1819-Input-B.git
+[submodule "lib/RWM1819-Scoreboard-A"]
+	path = lib/RWM1819-Scoreboard-A
+	url = https://github.com/itcgames/RWM1819-Scoreboard-A.git

@@ -2,10 +2,11 @@ class ScoreboardScene
 {
   constructor(){
     this.sceneEnded = false;
+    this.scoreboard = new ScoreboardManager();
+    this.scoreboard.initBoard("session");
   }
 
   update(dt){
-
   }
 
   draw(ctx){
