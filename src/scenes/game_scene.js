@@ -7,15 +7,14 @@ class GameScene {
     this.fanImage = new Image();
     this.fanWindImage = new Image();
     //this.spring = new Spring(50, 300, this.springImage);
-    var that = this;
     this.springImage.addEventListener('load', function () {
-      that.items.push(new Spring(50, 300, that.springImage));
-    });
+      this.items.push(new Spring(50, 600, this.springImage));
+    }.bind(this));
     this.fanImage.addEventListener('load', function () {
-    });
+    }.bind(this));
     this.fanWindImage.addEventListener('load', function () {
-      that.items.push(new Fan(20, 200, that.fanImage, that.fanWindImage));
-    });
+      this.items.push(new Fan(400, 700, this.fanImage, this.fanWindImage));
+    }.bind(this));
     this.items = [];
     this.springImage.src = "./src/resources/spring_anim.png";
     this.fanImage.src = "./src/resources/fan_anim.png";
@@ -27,6 +26,12 @@ class GameScene {
 
     //The ui bar
     this.ui = new UI();
+    //The toolbar object
+    this.toolBar = new toolbar();
+
+    //Bind events for the click, for the oolbar
+    window.addEventListener("click", this.checkToolbarClick.bind(this));
+    this.ball.impulse(0, 0);
   }
 
   /**
@@ -35,50 +40,82 @@ class GameScene {
    * time since last update in ms
    */
   update(dt) {
-
-    for (var i in this.items) {
-      if (this.items[i] instanceof Spring) {
-        if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
-          if (this.items[i].angle === 0) {
-            this.ball.impulse(0, -3);
+    this.items.forEach(function (item) {
+      if (item instanceof Spring) {
+        if (collisionManager.boolCircleToCircle(item.collisionCircle, this.ball.collisionCircle)) {
+          if (item.angle === 0) {
+            this.ball.impulse(0, -10);
+            this.ball.position.y -= this.ball.radius;
           }
-          else if (this.items[i].angle === 90) {
-            this.ball.impulse(3, 0);
+          else if (item.angle === 90) {
+            this.ball.impulse(10, 0);
+            this.ball.position.x += this.ball.radius;
           }
-          else if (this.items[i].angle === 180) {
-            this.ball.impulse(0, 3);
+          else if (item.angle === 180) {
+            this.ball.impulse(0, 10);
+            this.ball.position.y += this.ball.radius;
           }
           else {
-            this.ball.impulse(-3, 0);
+            this.ball.impulse(-10, 0);
+            this.ball.position.x -= this.ball.radius;
           }
-          this.items[i].bounce();
+          item.bounce();
         }
       }
-      else if (this.items[i] instanceof Fan) {
-        if (collisionManager.boolCircleToAABB(this.ball.collisionCircle, 
-            [
-              this.items[i].collisionBox.points.top_left,
-              this.items[i].collisionBox.points.top_right,
-              this.items[i].collisionBox.points.bottom_left,
-              this.items[i].collisionBox.points.bottom_right
-            ])) 
-        {
-          this.ball.applyForce(0.01,0);
-          console.log("collision with fan and ball");
+      else if (item instanceof Fan) {
+        if (collisionManager.boolCircleToAABB(this.ball.collisionCircle,
+          [
+            item.collisionBox.points.top_left,
+            item.collisionBox.points.top_right,
+            item.collisionBox.points.bottom_right,
+            item.collisionBox.points.bottom_left
+          ])) {
+          if (item.angle === 0) {
+            this.ball.applyForce(0.4, 0);
+          }
+          else if (item.angle === 90) {
+            this.ball.applyForce(0, 0.4);
+          }
+          else if (item.angle === 180) {
+            this.ball.applyForce(-0.4, 0);
+          }
+          else {
+            this.ball.applyForce(0, -1);
+          }
         }
       }
-      this.items[i].update(dt);
-    }
+      item.update(dt);
+    }, this);
 
-    this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
 
-    //Update UI
-    this.ui.update(dt);
-
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
+
+    //Update UI
+    this.ui.update(dt);
+  }
+
+  checkToolbarClick(e) {
+    let returned = this.toolBar.checkButton(e);
+
+    if (returned === "trash") {
+      console.log("Trash");
+    }
+
+    if (returned === "delete") {
+      console.log("delete");
+    }
+
+    if (returned === "exit") {
+      console.log("exit")
+    }
+
+    if (returned === "restart") {
+      console.log("restart");
+    }
+
   }
 
   /**
@@ -89,9 +126,7 @@ class GameScene {
   draw(ctx) {
     ctx.fillStyle = "#71f441";
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    for (var i in this.items) {
-      this.items[i].draw(ctx);
-    }
+    this.items.forEach(item => item.draw(ctx));
     this.block.draw(ctx);
     this.floorBlock.draw(ctx);
     this.zBlock.draw(ctx);
