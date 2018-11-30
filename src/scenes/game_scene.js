@@ -2,10 +2,29 @@ class GameScene {
   constructor() {
     this.sceneEnded = false;
     this.gravity = 0.008;
-    this.ball = new Ball(100, 100);
+    this.ball = new Ball(250, 275);
+    this.springImage = new Image();
+    //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
     
     this.keyboard = new Keyboard();
+    this.block  = new Block(300,300);
+    this.floorBlock = new FloorBlock(900, 300);
+    this.zBlock = new Zblock(900, 600);
+    
+    /** @type {Array<Level>} */
+    this.levels = [];
+    /** @type {Level} */
+    this.currentLevel = null;
+    Level.load(
+      "./src/resources/levels.json",
+      function (e, data) {
+        /** @type {[]} */
+        const allLevelsData = JSON.parse(data);
+        allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
+        if (this.levels.length > 0) { this.currentLevel = this.levels[0]; }
+      }.bind(this),
+      function (e) { console.error("Error in GameScene.constructor() -> level loading"); });
 
     //The ui bar
     this.ui = new UI();
@@ -52,6 +71,14 @@ class GameScene {
     }
     
     this.ball.update(dt);
+    this.block.update(dt);
+    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+    // Debug
+    console.log(this.ball.acceleration);
+    
+
+    this.floorBlock.update(dt);
+    this.zBlock.update(dt);
 
     //Update UI
     this.ui.update(dt);
@@ -96,6 +123,7 @@ class GameScene {
     }
 
     this.ball.draw(ctx);
+    if (this.currentLevel !== null) { this.currentLevel.draw(ctx); }
     
     //Draw the Ui on top of everything else
     this.ui.draw(ctx);
