@@ -97,8 +97,14 @@ class GameScene {
         else if (item instanceof Fan) {
           this.fanCollision(item);
         }
-        item.update(dt);
+        else if (item instanceof Block || item instanceof FloorBlock) {
+          this.squareCollision(item);
+        }
+        else if (item instanceof Zblock) {
+        this.Zblock(item);
+        }
       }, this);
+
       this.ball.update(dt);
       if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
     }
@@ -122,7 +128,6 @@ class GameScene {
     }
     //Update UI
     this.ui.update(dt);
-  }
 }
 
   squareCollision(item) {
