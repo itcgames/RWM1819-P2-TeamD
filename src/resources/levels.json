@@ -1,7 +1,7 @@
 [
     {
         "start": {
-            "position": { "x": 200, "y": 300 },
+            "position": { "x": 200, "y": 500 },
             "dimensions": { "x": 100, "y": 80 },
             "color": { "r": 0, "g": 255, "b": 0 },
             "spawnPoint": { "x": 250, "y": 240 }

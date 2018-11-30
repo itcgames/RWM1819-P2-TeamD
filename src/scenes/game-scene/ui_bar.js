@@ -2,7 +2,7 @@ class UI {
   constructor() {
     //our text positions for the amount of items available
     this.textPositions = [[220,17], [429, 17], [638, 17], [847, 17], [1056, 17], [1265, 17]];
-    this.itemsAvailable = [0, 0, 0, 0, 0, 0];
+    this.itemsAvailable = [3, 2, 4, 1, 1, 1];
 
     //Ui Backdrop showing all the items
     this.uiBackdrop = new Image();
