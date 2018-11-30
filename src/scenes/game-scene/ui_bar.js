@@ -1,5 +1,9 @@
 class UI {
   constructor() {
+    //our text positions for the amount of items available
+    this.textPositions = [[220,17], [429, 17], [638, 17], [847, 17], [1056, 17], [1265, 17]];
+    this.itemsAvailable = [3, 2, 4, 1, 1, 1];
+
     //Ui Backdrop showing all the items
     this.uiBackdrop = new Image();
     this.uiBackdrop.src = "./src/resources/gui/ui_bar.png";
@@ -25,10 +29,15 @@ class UI {
     this.springCollider = new Square(1045, 0, 209, 75); //Spring
     this.gravCollider = new Square(1254, 0, 209, 75); //Gravity obelisk
 
-    this.flatBox = new Square(0, 0, 100, 50);
+    //The spring image
+    this.springImage = new Image();
+    //The spring image source
+    this.springImage.src = "./src/resources/spring_anim.png";
 
+    //The object we are currently dragging
     this.objDragging = undefined;
 
+    //Create the drag and dropper
     this.dnd = new DragDrop();
 
     //Bind events for the drag and drop
@@ -38,18 +47,40 @@ class UI {
     //Add our spawn colliders to our list
     this.colliders = [this.boxCollider, this.floorCollider, this.zCollider,
     this.fanCollider, this.springCollider, this.gravCollider];
-    //Holds 
+    //Holds all of the items in the game, there will be none at the start as the player will have to
     this.items = [];
+    //The index of the last item dragged
     this.lastDragged = undefined;
   }
 
   checkDraggable(rect) {
     if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect)) {
       this.dragging = true; //Set dragging to true
-      var box = new Square(this.dnd.mouseX - 50, this.dnd.mouseY - 25, 100, 50);
-      this.items.push(box);
-      this.dnd.addDraggable(box);
-      this.lastDragged = box;
+      var item;
+      if(rect == this.springCollider){ //Spawn spring object
+        item = new Spring(this.dnd.mouseX - 50, this.dnd.mouseY - 15, this.springImage);
+      }
+      if(rect == this.boxCollider){
+        item = new Block(this.dnd.mouseX - 50, this.dnd.mouseY - 50);
+      }
+      if(rect == this.floorCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30);
+      }
+      if(rect == this.zCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a z block
+      }
+      if(rect == this.fanCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a Fan
+      }
+      if(rect == this.gravCollider){
+        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a gravity block thingy
+      }
+
+      //Add to our items vector
+      this.items.push(item);
+      //Push the items rectangle into the rag and drop
+      this.dnd.addDraggable(item.rect);
+      this.lastDragged = item;
       return true;
     }
     return false;
@@ -57,8 +88,10 @@ class UI {
 
   mouseDown(e) {
     var isDragged = false;
+    //Check if we clicked a spawn collider
     for (var i in this.colliders) {
-      if (this.checkDraggable(this.colliders[i])) {
+      if (this.itemsAvailable[i] > 0 && this.checkDraggable(this.colliders[i])) {
+        this.itemsAvailable[i]--;
         isDragged = true;
         break;
       }
@@ -68,7 +101,7 @@ class UI {
     //are dragging an already spawned object
     if (isDragged === false) {
       for (var i in this.items) {
-        if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i])) {
+        if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.items[i].rect)) {
           this.dragging = true;
           this.lastDragged = this.items[i];
           break;
@@ -85,13 +118,15 @@ class UI {
     if (this.dragging) {
       var deleteObj = false;
       //If we dropped on the ui bar then remove the item back to our bags
-      if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, this.dragBackDropCollider)) {
+      if (this.dnd.haveIntersection(this.lastDragged.rect, this.dragBackDropCollider)) {
         deleteObj = true;
       }
 
+      //Loop through our items
       for (var i in this.items) {
         if (this.items[i] != this.lastDragged) {
-          if (this.dnd.haveIntersection(this.lastDragged, this.items[i])) {
+          //If we have dropped an item onto another item, delete it
+          if (this.dnd.haveIntersection(this.lastDragged.rect, this.items[i].rect)) {
             deleteObj = true;
           }
         }
@@ -99,9 +134,27 @@ class UI {
 
 
       if (deleteObj) {
+        //Check what type of object it is and increase the amount we have on our ui
+        if(this.lastDragged instanceof Spring){
+          this.itemsAvailable[4]++;
+        }
+        else if(this.lastDragged instanceof FloorBlock){
+          this.itemsAvailable[1]++;
+        }
+        else if(this.lastDragged instanceof Block){
+          this.itemsAvailable[0]++;
+        }
+        else if(this.lastDragged instanceof Zblock){
+          this.itemsAvailable[2]++;
+        }
+
+        //Need the other classes complete to add the last ones
+
+
         this.dnd.removeTargetDraggable(this.lastDragged);
         var indexToDel = this.items.indexOf(this.lastDragged); //Get the index to delete
         this.items.splice(indexToDel, 1); //Remove the last dragged item from the rectangle
+        this.lastDragged = undefined;
       }
     }
     //Call drag end of drag and drop
@@ -129,6 +182,11 @@ class UI {
         this.dragBackdropY = this.lerp(this.dragBackdropY, -75, .25);
       }
     }
+
+    //Update all of the items we have created
+    for (var index in this.items) {
+      this.items[index].update(dt);
+    }
   }
 
   //Simple lerp function
@@ -139,11 +197,19 @@ class UI {
   draw(ctx) {
     //Draw our backdrops
     ctx.drawImage(this.uiBackdrop, 0, 0);
+    //Draw all of our items left indicatiors
+    ctx.textAlign = "left";
+    ctx.fillStyle = "#000000";
+    ctx.font="20px Berlin Sans";
+    //Loop through our text positions
+    for(var i in this.textPositions){
+      ctx.fillText("x" + this.itemsAvailable[i].toString(), this.textPositions[i][0], this.textPositions[i][1]);
+    }
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
-    //Draw all of the boxes we have created
+    //Draw all of the items we have created
     for (var index in this.items) {
-      this.items[index].render(ctx);
+      this.items[index].draw(ctx);
     }
   }
 }
