@@ -3,9 +3,25 @@ class GameScene {
     this.sceneEnded = false;
     this.gravity = 0.008;
     this.ball = new Ball(100, 150);
-    var that = this;
     var ballupdate = false;
     this.keyboard = new Keyboard();
+    this.block = new Block(300, 300);
+    this.floorBlock = new FloorBlock(900, 300);
+    this.zBlock = new Zblock(900, 600);
+
+    /** @type {Array<Level>} */
+    this.levels = [];
+    /** @type {Level} */
+    this.currentLevel = null;
+    Level.load(
+      "./src/resources/levels.json",
+      function (e, data) {
+        /** @type {[]} */
+        const allLevelsData = JSON.parse(data);
+        allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
+        if (this.levels.length > 0) { this.currentLevel = this.levels[0]; }
+      }.bind(this),
+      function (e) { console.error("Error in GameScene.constructor() -> level loading"); });
 
     //The ui bar
     this.ui = new UI();
@@ -24,15 +40,15 @@ class GameScene {
     this.ball.velocity.x = 0;
     this.ball.velocity.y = 0;
     this.ballupdate = false;
-   
+
   }
 
-  play(){
+  play() {
     this.ballupdate = true;
 
   }
 
-  delete(){
+  delete() {
     this.ui.items.splice(0, this.ui.items.length);
     this.ui.itemsAvailable = [3, 2, 4, 1, 1, 1];
 
@@ -45,23 +61,23 @@ class GameScene {
    */
   update(dt) {
 
-    for(var i in this.items){
-      if(this.items[i] instanceof Spring){
+    for (var i in this.items) {
+      if (this.items[i] instanceof Spring) {
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.impulse(0,-10);
-	          this.ball.position.y -= this.ball.radius;
+            this.ball.impulse(0, -10);
+            this.ball.position.y -= this.ball.radius;
           }
-          else if(this.items[i].angle === 90){
-            this.ball.impulse(10,0);
+          else if (this.items[i].angle === 90) {
+            this.ball.impulse(10, 0);
             this.ball.position.x += this.ball.radius;
           }
-          else if(this.items[i].angle === 180){
-            this.ball.impulse(0,10);
+          else if (this.items[i].angle === 180) {
+            this.ball.impulse(0, 10);
             this.ball.position.y += this.ball.radius;
           }
-          else{
-            this.ball.impulse(-10,0);
+          else {
+            this.ball.impulse(-10, 0);
             this.ball.position.x -= this.ball.radius;
           }
           this.items[i].bounce();
@@ -70,48 +86,46 @@ class GameScene {
       //we should be updating all items here, regardless of what they are
       this.items[i].update(dt);
     }
-    
-    if(this.ballupdate == true)
-    {
+
+    if (this.ballupdate == true) {
       this.ball.update(dt);
     }
-   
+    this.block.update(dt);
+    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+
+
+    this.floorBlock.update(dt);
+    this.zBlock.update(dt);
 
     //Update UI
     this.ui.update(dt);
   }
 
-  checkButtonClick(e)
-  {
+  checkButtonClick(e) {
     //The scene we want to go, leave it empty if we want to stay in the current scene
     var newScene = "";
     let returned = this.toolBar.checkButton(e);
 
-    if(returned === "trash")
-    {
+    if (returned === "trash") {
       console.log("Trash");
       this.delete();
     }
 
-    if(returned === "delete")
-    {
+    if (returned === "delete") {
       console.log("delete");
     }
 
-    if(returned === "exit")
-    {
+    if (returned === "exit") {
       console.log("exit")
       newScene = "this.mManager.setCurrentScene('Main Menu')";
     }
 
-    if(returned === "restart")
-    {
+    if (returned === "restart") {
       console.log("restart");
       this.restart();
     }
 
-    if(returned === "play")
-    {
+    if (returned === "play") {
       this.play()
     }
 
@@ -128,12 +142,13 @@ class GameScene {
   draw(ctx) {
     ctx.fillStyle = "#71f441";
     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    for(var i in this.items){
+    for (var i in this.items) {
       this.items[i].draw(ctx);
     }
 
     this.ball.draw(ctx);
-    
+    if (this.currentLevel !== null) { this.currentLevel.draw(ctx); }
+
     //Draw the Ui on top of everything else
     this.ui.draw(ctx);
     // this.spring.draw(ctx);
