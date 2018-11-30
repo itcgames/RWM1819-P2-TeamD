@@ -83,7 +83,7 @@ class GameScene {
   delete() {
     this.ui.items.splice(0, this.ui.items.length);
     this.ui.itemsAvailable = [3, 2, 4, 1, 1, 1];
-
+  }
 
   /**
    * will update all the game scene logic
