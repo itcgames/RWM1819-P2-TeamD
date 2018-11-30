@@ -1,5 +1,6 @@
 class GameScene {
   constructor() {
+    this.scoreRecorded = false;
     this.sceneEnded = false;
     //Level index for scoreboard
     this.levelIndex = 0;
@@ -17,6 +18,7 @@ class GameScene {
     this.keyboard = new Keyboard();
 
     this.currentLevel = null;
+    this.levelNum = 0;
     //The ui bar
     this.ui = new UI();
     //Keep a reference to the items spawned by the UI/Drag and drop
@@ -24,6 +26,8 @@ class GameScene {
     //The toolbar object
     this.toolBar = new toolbar();
     this.endGame = false;
+
+    this.mManager;
   }
 
 
@@ -44,15 +48,25 @@ class GameScene {
   }
 
   //Method to intialise the level, where the ball spawns, and setting ui elements values
-  initLevel(level)
+  initLevel(level, levelNum, menuManager)
   {
+    this.mManager = menuManager;
+    this.levelNum = levelNum;
+    this.ball.position.x = 100;
+    this.ball.position.y = 150;
+    this.ball.acceleration.x = 0;
+    this.ball.acceleration.y = 0;
+    this.ball.velocity.x = 0;
+    this.ball.velocity.y = 0;
+    this.ballupdate = false;
+    this.endGame = false;
     this.currentLevel = level;
+    this.delete();
     this.ui.setUi(level);
   }
 
   play() {
     this.ballupdate = true;
-
   }
 
   delete() {
@@ -87,20 +101,25 @@ class GameScene {
       if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
     }
 
-    if(this.endGame)
+    if(this.endGame && !this.scoreRecorded)
     {
-    
+      
       //Update timer
       this.timeTaken = this.scoreboard.getDisplayTimer();
 
-      if (this.keyboard.isButtonPressed("6") && this.scoreboard.timerActive == true) {
-        this.scoreboard.stopTimer();
-        //Insert level number here
-        //this.scoreboard.playerName = "";
-        this.scoreboard.initBoard("session");
-        this.scoreboard.addToBoard(dt);
-        //console.log(this.scoreboard.getBoard());
-      }
+      //The score the user got this level
+      var score = 100 * (this.ui.itemsUsed / this.ui.maxItems);
+      console.log(score);
+
+      this.scoreboard.stopTimer();
+      //Insert level number here
+      this.scoreboard.playerName = this.levelNum.toString();
+      this.scoreboard.initBoard("session");
+      this.scoreboard.addToBoard(dt);
+
+      this.scoreRecorded = true;
+
+      this.mManager.fadeTo("Level Select");
     }
     //Update UI
     this.ui.update(dt);

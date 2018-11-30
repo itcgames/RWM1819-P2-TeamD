@@ -91,12 +91,13 @@ class Game {
         //If we have chosen a level in the level select scene then pass over our data
         if(returned === "this.mManager.fadeTo('Game')"){ 
           //Pass over the data for the chosen level
-          this.mManager.scenes.get("Game").initLevel(this.levels[this.mManager.scenes.get("Level Select").selectedLevel - 1]);
+          this.mManager.scenes.get("Game").initLevel(this.levels[this.mManager.scenes.get("Level Select").selectedLevel - 1],
+           this.mManager.scenes.get("Level Select").selectedLevel, this.mManager);
         }
 
         //If we have chosen to go to the scoreboard, call our scoreboard method
         if(returned === "this.mManager.fadeTo('Scoreboard')"){ 
-          this.mManager.current.value.openScoreboard();
+          this.mManager.scenes.get("Scoreboard").openScoreboard();
         }
       }
     }

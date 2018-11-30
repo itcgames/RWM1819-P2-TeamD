@@ -46,6 +46,9 @@ class UI {
     //Create the drag and dropper
     this.dnd = new DragDrop();
 
+    this.maxItems = 0;
+    this.itemsUsed = 0;
+
     //Bind events for the drag and drop
     window.addEventListener("mousedown", this.mouseDown.bind(this));
     window.addEventListener("mouseup", this.mouseUp.bind(this));
@@ -66,9 +69,14 @@ class UI {
   }
   setUi(data)
   {
+    this.itemsUsed = 0;
     this.data = data;
     //Set the items available that we can place
     this.itemsAvailable = data.availableBlocks;
+
+    for(var i in this.itemsAvailable){
+      this.maxItems += this.itemsAvailable[i];
+    }
   }
 
   returnAllItems()
@@ -119,6 +127,8 @@ class UI {
       if(rect == this.gravCollider){
         item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a gravity block thingy
       }
+
+      this.itemsUsed++;
 
       //Add to our items vector
       this.items.push(item);
@@ -194,7 +204,8 @@ class UI {
         else if(this.lastDragged instanceof Fan){
           this.itemsAvailable[3]++;
         }
-
+        //Take away from items used
+        this.itemsUsed--; 
         //Need the other classes complete to add the last ones
 
 

@@ -13,8 +13,10 @@ class LevelSelectScene
     this.level5Btn = new LevelButton(960, 640, {x: 520, y: 0, w: 130, h: 130});
     this.level6Btn = new LevelButton(1252, 640, {x: 650, y: 0, w: 130, h: 130});
 
+    this.returnBtn = new MenuButton(960, 800, "Main Menu", "this.mManager.fadeTo('Main Menu')");
+
     this.btns = [this.level1Btn, this.level2Btn, this.level3Btn,
-      this.level4Btn, this.level5Btn, this.level6Btn];
+      this.level4Btn, this.level5Btn, this.level6Btn, this.returnBtn];
 
     this.selectedLevel = 0;
   }
