@@ -17,6 +17,14 @@ class FloorBlock {
 
   }
 
+  get aabb() {
+    return [
+      { x: this.rect.x, y: this.rect.y },
+      { x: this.rect.x + this.rect.width, y: this.rect.y },
+      { x: this.rect.x + this.rect.width, y: this.rect.y + this.rect.height },
+      { x: this.rect.x, y: this.rect.y + this.rect.height }
+    ];
+  }
 
   update(dt) {
 
