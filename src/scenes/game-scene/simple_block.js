@@ -17,24 +17,26 @@ class Block {
     this.sHeight = 10;
     this.rotate = 0;
 
-    this.square = { x: 300, y: 300, w: 100, h: 100 };
-    
-
-
+    //Create rect for drag and drop
+    this.rect = new Square(sPosX, sPosY, 100, 100);
   }
 
   update(dt) {
-    this.sPosX = 300;
-    this.sPosY = 300;
-    this.setRotate(this.rotate += 0.1);
+    
+    //this.sPosX = 300;
+    //this.sPosY = 300;
+   // this.setRotate(this.rotate += 0.1);
 
   }
 
   draw(ctx) {
     ctx.fillStyle = "#17202A";
-    ctx.stroke();
+    //Draw the square
+    ctx.fillRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+
+    //ctx.stroke();
    
-    this.rotation(ctx, this.square.x, this.square.y, this.square.w, this.square.h, this.rotate);
+   // this.rotation(ctx, this.square.x, this.square.y, this.square.w, this.square.h, this.rotate);
     //ctx.fillRect(this.square.x, this.square.y, this.square.w, this.square.h);
     
   

@@ -58,12 +58,12 @@ class Game {
     }
   }
 
-  menuClickHandler()
+  menuClickHandler(e)
   {
     //If the scene has a method called checkButtonClick
     if(typeof this.mManager.current.value.checkButtonClick === 'function')
     {
-      var returned = this.mManager.current.value.checkButtonClick();
+      var returned = this.mManager.current.value.checkButtonClick(e);
       //If the first item return is true, then change our scene depending on
       //button name
       if(returned !== ""){
