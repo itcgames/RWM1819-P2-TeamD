@@ -7,7 +7,7 @@ class GameScene {
     //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
     this.springImage.addEventListener('load', function () {
-      that.items.push(new Spring(50, 300, that.springImage));
+      that.items.push(new Spring(50, 600, that.springImage));
     });
     this.items = [];
     this.springImage.src = "./src/resources/spring_anim.png";
@@ -32,6 +32,11 @@ class GameScene {
 
     //The ui bar
     this.ui = new UI();
+    //The toolbar object
+    this.toolBar = new toolbar();
+
+    //Bind events for the click, for the oolbar
+    window.addEventListener("click", this.checkToolbarClick.bind(this));
   }
 
   /**
@@ -45,37 +50,65 @@ class GameScene {
       if(this.items[i] instanceof Spring){
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.impulse(0, -3);
+            this.ball.impulse(0,-10);
+	          this.ball.position.y -= this.ball.radius;
           }
           else if(this.items[i].angle === 90){
-            this.ball.impulse(3, 0);
+            this.ball.impulse(10,0);
+            this.ball.position.x += this.ball.radius;
           }
           else if(this.items[i].angle === 180){
-            this.ball.impulse(0,3);
+            this.ball.impulse(0,10);
+            this.ball.position.y += this.ball.radius;
           }
           else{
-            this.ball.impulse(-3,0);
+            this.ball.impulse(-10,0);
+            this.ball.position.x -= this.ball.radius;
           }
           this.items[i].bounce();
         }
         this.items[i].update(dt);
       }
-
-
     }
     
-    this.ball.applyForce(0, this.gravity);
     this.ball.update(dt);
     this.block.update(dt);
     if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
     // Debug
     console.log(this.ball.acceleration);
     
-    //Update UI
-    this.ui.update(dt);
-    
+
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
+
+    //Update UI
+    this.ui.update(dt);
+  }
+
+  checkToolbarClick(e)
+  {
+    let returned = this.toolBar.checkButton(e);
+
+    if(returned === "trash")
+    {
+      console.log("Trash");
+    }
+
+    if(returned === "delete")
+    {
+      console.log("delete");
+    }
+
+    if(returned === "exit")
+    {
+      console.log("exit")
+    }
+
+    if(returned === "restart")
+    {
+      console.log("restart");
+    }
+
   }
 
   /**
