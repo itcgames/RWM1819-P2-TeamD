@@ -2,7 +2,7 @@ class GameScene {
   constructor() {
     this.sceneEnded = false;
     this.gravity = 0.008;
-    this.ball = new Ball(100, 100);
+    this.ball = new Ball(250, 275);
     this.springImage = new Image();
     //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
@@ -68,6 +68,8 @@ class GameScene {
     this.ball.update(dt);
     this.block.update(dt);
     if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+    // Debug
+    console.log(this.ball.acceleration);
     
     //Update UI
     this.ui.update(dt);
