@@ -70,10 +70,12 @@ class Level {
    * Check for collisions between static obstacles and the passed in ball.
    * @param {number} dt time between update calls
    * @param {Ball} ball ball to be checked in collisions.
+   * @param {GameScene} gameScene game scene.
    */
-  update(dt, ball) {
+  update(dt, ball, gameScene) {
     Level.collisionsBallToStart(ball, this.start);
     Level.collisionsBallToWalls(ball, this.walls);
+    Level.collisionsBallToEnd(ball, this.end, gameScene);
   }
 
   /**
@@ -96,6 +98,19 @@ class Level {
       const result = collisionManager.maniCircleToAABB(ball.collisionCircle, wall.aabb);
       if (result.collision) { Level.collisionResponseFromBallToBlock(ball, result.manifest); }
     });
+  }
+
+  /**
+   * @param {Ball} ball 
+   * @param {EndBlock} end 
+   * @param {GameScene} gameScene 
+   */
+  static collisionsBallToEnd(ball, end, gameScene) {
+    const result = collisionManager.maniCircleToAABB(ball.collisionCircle, end.aabb);
+    if (result.collision) {
+      Level.collisionResponseFromBallToBlock(ball, result.manifest);
+      gameScene.endGame = true;
+    }
   }
 
   /**

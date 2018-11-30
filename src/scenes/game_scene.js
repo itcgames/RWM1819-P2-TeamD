@@ -1,40 +1,29 @@
 class GameScene {
   constructor() {
     this.sceneEnded = false;
-    this.gravity = 0.008;
-    this.ball = new Ball(250, 275);
-
     //Level index for scoreboard
     this.levelIndex = 0;
-    // this.gravity = 0.008;
-    // this.springImage = new Image();
-    // this.fanImage = new Image();
-    // this.fanWindImage = new Image();
-    // //this.spring = new Spring(50, 300, this.springImage);
-    // this.springImage.addEventListener('load', function () {
-    //   this.items.push(new Spring(50, 600, this.springImage));
-    // }.bind(this));
-    // this.fanImage.addEventListener('load', function () {
-    // }.bind(this));
-    // this.fanWindImage.addEventListener('load', function () {
-    //   this.items.push(new Fan(10, 440, this.fanImage, this.fanWindImage));
-    // }.bind(this));
+
+    //The scorboard manager
+    this.scoreboard = new ScoreboardManager();
+    this.scoreboard.timerActive = false;
+    this.start = false;
+
+    //Object to store the timer
+    this.timeTaken = "";
     this.items = [];
-    // this.springImage.src = "./src/resources/spring_anim.png";
-    // this.fanImage.src = "./src/resources/fan_anim.png";
-    // this.fanWindImage.src = "./src/resources/wind.png";
     this.ball = new Ball(100, 150);
     var ballupdate = false;
     this.keyboard = new Keyboard();
 
     this.currentLevel = null;
-
     //The ui bar
     this.ui = new UI();
     //Keep a reference to the items spawned by the UI/Drag and drop
     this.items = this.ui.items;
     //The toolbar object
     this.toolBar = new toolbar();
+    this.endGame = false;
   }
 
 
@@ -46,6 +35,12 @@ class GameScene {
     this.ball.velocity.x = 0;
     this.ball.velocity.y = 0;
     this.ballupdate = false;
+    this.endGame = false;
+  }
+
+  play() {
+    this.ballupdate = true;
+
   }
 
   //Method to intialise the level, where the ball spawns, and setting ui elements values
@@ -65,13 +60,20 @@ class GameScene {
     this.ui.items = []; //Clear the items
     this.items = this.ui.items; //Set our items again
   }
+
   /**
    * will update all the game scene logic
    * @param {number} dt 
    * time since last update in ms
    */
   update(dt) {
-    if(this.ballupdate){
+    if(this.ballupdate)
+    {
+      //If the timer is not running start it
+      if (this.scoreboard.timerActive == false && this.start == false) {
+        this.scoreboard.startTimer();
+        this.start = true;
+      }
       this.items.forEach(function (item) {
         if (item instanceof Spring) {
           this.springCollision(item);
@@ -79,14 +81,27 @@ class GameScene {
         else if (item instanceof Fan) {
           this.fanCollision(item);
         }
+        item.update(dt);
       }, this);
-      
-      //Update the ball
       this.ball.update(dt);
-      //Update the current level
-      if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+      if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
     }
 
+    if(this.endGame)
+    {
+    
+      //Update timer
+      this.timeTaken = this.scoreboard.getDisplayTimer();
+
+      if (this.keyboard.isButtonPressed("6") && this.scoreboard.timerActive == true) {
+        this.scoreboard.stopTimer();
+        //Insert level number here
+        //this.scoreboard.playerName = "";
+        this.scoreboard.initBoard("session");
+        this.scoreboard.addToBoard(dt);
+        //console.log(this.scoreboard.getBoard());
+      }
+    }
     //Update UI
     this.ui.update(dt);
   }
