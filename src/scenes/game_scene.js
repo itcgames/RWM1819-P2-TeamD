@@ -2,9 +2,9 @@ class GameScene {
   constructor() {
     this.sceneEnded = false;
     this.gravity = 0.008;
-    this.ball = new Ball(100, 100);
+    this.ball = new Ball(100, 150);
     var that = this;
-    
+    var ballupdate = false;
     this.keyboard = new Keyboard();
 
     //The ui bar
@@ -13,11 +13,31 @@ class GameScene {
     this.items = this.ui.items;
     //The toolbar object
     this.toolBar = new toolbar();
-
-    //Bind events for the click, for the oolbar
-    window.addEventListener("click", this.checkToolbarClick.bind(this));
   }
 
+
+  restart() {
+    this.ball.position.x = 100;
+    this.ball.position.y = 150;
+    this.ball.acceleration.x = 0;
+    this.ball.acceleration.y = 0;
+    this.ball.velocity.x = 0;
+    this.ball.velocity.y = 0;
+    this.ballupdate = false;
+   
+  }
+
+  play(){
+    this.ballupdate = true;
+
+  }
+
+  delete(){
+    this.ui.items.splice(0, this.ui.items.length);
+    this.ui.itemsAvailable = [3, 2, 4, 1, 1, 1];
+
+
+  }
   /**
    * will update all the game scene logic
    * @param {number} dt 
@@ -51,19 +71,26 @@ class GameScene {
       this.items[i].update(dt);
     }
     
-    this.ball.update(dt);
+    if(this.ballupdate == true)
+    {
+      this.ball.update(dt);
+    }
+   
 
     //Update UI
     this.ui.update(dt);
   }
 
-  checkToolbarClick(e)
+  checkButtonClick(e)
   {
+    //The scene we want to go, leave it empty if we want to stay in the current scene
+    var newScene = "";
     let returned = this.toolBar.checkButton(e);
 
     if(returned === "trash")
     {
       console.log("Trash");
+      this.delete();
     }
 
     if(returned === "delete")
@@ -74,12 +101,22 @@ class GameScene {
     if(returned === "exit")
     {
       console.log("exit")
+      newScene = "this.mManager.setCurrentScene('Main Menu')";
     }
 
     if(returned === "restart")
     {
       console.log("restart");
+      this.restart();
     }
+
+    if(returned === "play")
+    {
+      this.play()
+    }
+
+    //Return the new scene
+    return newScene;
 
   }
 

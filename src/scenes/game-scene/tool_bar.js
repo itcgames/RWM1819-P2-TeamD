@@ -4,12 +4,12 @@ class toolbar
 
   constructor() {
 
-    this.exitCollider = new Square(1815.5, 0, 104.5, 75);
+    this.playCollider = new Square(1815.5, 0, 104.5, 75);
     this.restartCollider = new Square(1711, 0, 104.5, 75);
     this.trashCollider = new Square(1606.5, 0, 104.5,75);
     this.deleteCollider= new Square(1502, 0, 104.5, 75);
   
-    this.btnCol = [this.exitCollider, this.restartCollider, 
+    this.btnCol = [this.playCollider, this.restartCollider, 
                       this.deleteCollider, this.trashCollider];
   }
 
@@ -28,11 +28,11 @@ class toolbar
         }
         if(this.btnCol[index] === this.deleteCollider)
         {
-          return "delete";
-        }
-        if(this.btnCol[index] === this.exitCollider)
-        {
           return "exit";
+        }
+        if(this.btnCol[index] === this.playCollider)
+        {
+          return "play";
         }
          
       }

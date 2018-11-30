@@ -17,7 +17,7 @@ class MainMenuScene
 
   }
 
-  checkButtonClick()
+  checkButtonClick(e)
   {
     //Loop through our buttons
     for(let btn of this.btns){
