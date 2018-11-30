@@ -68,10 +68,13 @@ class Fan {
         y: 100
       }
     };
+    /**
+     * @type {{ position: { x: number, y: number }, size: { width: number, height: number }, points: { top_left: { x: number, y: number }, top_right: { x: number, y: number }, bottom_right: { x: number, y: number }, bottom_left: { x: number, y: number } }}}
+     */
     this.collisionBox = {
       position: {
-        x: this.position.x + (this.size.width / 2),
-        y: this.position.y - 40
+        x: this.windAnimationBox.position.x - 310,
+        y: this.windAnimationBox.position.y - 40
       },
       size: {
         width: 500,
@@ -122,8 +125,14 @@ class Fan {
     ctx.save();
     this.fanAnimator.draw(ctx);
     this.windAnimator.draw(ctx);
-    // ctx.rect(this.collisionBox.position.x + (this.collisionBox.size.width / 2), this.position.y - 40, 500, 80);
-    // ctx.fill();
+    // ctx.moveTo(this.collisionBox.points.top_left.x, this.collisionBox.points.top_left.y);
+    // ctx.lineTo(this.collisionBox.points.top_right.x, this.collisionBox.points.top_right.y);
+    // ctx.lineTo(this.collisionBox.points.bottom_right.x, this.collisionBox.points.bottom_right.y);
+    // ctx.lineTo(this.collisionBox.points.bottom_left.x, this.collisionBox.points.bottom_left.y);
+    // ctx.lineTo(this.collisionBox.points.top_left.x, this.collisionBox.points.top_left.y);
+    // //ctx.rect(this.collisionBox.position.x, this.collisionBox.position.y, this.collisionBox.size.width, this.collisionBox.size.height);
+    // ctx.stroke();
+
     ctx.restore();
   }
 
@@ -140,6 +149,37 @@ class Fan {
     }
     this.angle = newAngle;
     this.fanAnimator.setRotation("fan", this.angle);
+    var newPos = this.rotateVector(this.windAnimationBox.position, this.position, rotateBy);
+    this.windAnimationBox.position.x = newPos.x + (this.size.width / 2);
+    this.windAnimationBox.position.y = newPos.y;
+    this.windAnimator.setRotation("wind", this.angle + 90);
+    newPos = this.rotateVector(this.collisionBox.points.top_left, this.position, rotateBy);
+    this.collisionBox.points.top_left.x = newPos.x;
+    this.collisionBox.points.top_left.y = newPos.y;
+
+    newPos = this.rotateVector(
+      this.collisionBox.points.top_right,
+      this.position,
+      rotateBy
+    );
+    this.collisionBox.points.top_right.x = newPos.x;
+    this.collisionBox.points.top_right.y = newPos.y;
+
+    newPos = this.rotateVector(
+      this.collisionBox.points.bottom_right,
+      this.position,
+      rotateBy
+    );
+    this.collisionBox.points.bottom_right.x = newPos.x;
+    this.collisionBox.points.bottom_right.y = newPos.y;
+
+    newPos = this.rotateVector(
+      this.collisionBox.points.bottom_left,
+      this.position,
+      rotateBy
+    );
+    this.collisionBox.points.bottom_left.x = newPos.x;
+    this.collisionBox.points.bottom_left.y = newPos.y;
   }
 
   /**
@@ -152,6 +192,8 @@ class Fan {
   setPosition(newX, newY) {
     this.position.x = newX;
     this.position.y = newY;
+    this.collisionBox.position.x = newX + (this.size.width / 2);
+    this.collisionBox.position.y = newY - 40;
     this.updatePoints();
   }
 
@@ -181,24 +223,13 @@ class Fan {
     return this.points;
   }
 
-    /**
-   * method to rotate a vector about an origin.
-   * @param {number} x 
-   * x of the vector to rotate
-   * @param {number} y 
-   * y of the vector to rotate
-   * @param {number} originX 
-   * origin x coord to rotate by
-   * @param {number} originY 
-   * origin y coord to rotate by
-   * @param {number} angle 
-   * angle to rotate by
-   */
-  rotateVector(x, y, originX, originY, angle) {
-    angle = MathF.rad(angle);
+  rotateVector(vector, origin, angle) {
+    const rad = angle * (Math.PI/180);
+    const cosine = Math.cos(rad);
+    const sine = Math.sin(rad);
     return {
-      x: Math.cos(angle) * (vector.x - origin.x) - Math.sin(angle) * (vector.y - origin.y) + origin.x,
-      y: Math.sin(angle) * (vector.x - origin.x) + Math.cos(angle) * (vector.y - origin.y) + origin.y
+      x: (cosine * (vector.x - origin.x)) - (sine * (vector.y - origin.y)) + origin.x,
+      y: (sine * (vector.x - origin.x)) + (cosine * (vector.y - origin.y)) + origin.y
     };
   }
 }
