@@ -2,23 +2,24 @@ class GameScene {
   constructor() {
     this.sceneEnded = false;
     this.gravity = 0.008;
-    this.ball = new Ball(100, 100);
+    this.ball = new Ball(250, 275);
     this.springImage = new Image();
     //this.spring = new Spring(50, 300, this.springImage);
     var that = this;
-    this.springImage.addEventListener('load', function () {
-      that.items.push(new Spring(50, 300, that.springImage));
-    });
-    this.items = [];
-    this.springImage.src = "./src/resources/spring_anim.png";
+    
     this.keyboard = new Keyboard();
     this.block = new Block(300, 300);
     this.floorBlock = new FloorBlock(900, 300);
     this.zBlock = new Zblock(900, 600);
+    
+    /** @type {Level} */
+    this.currentLevel = null;
+
+    //Level index for scoreboard
+    this.levelIndex = 0;
 
     //The ui bar
     this.ui = new UI();
-
     //The scorboard manager
     this.scoreboard = new ScoreboardManager();
     this.scoreboard.timerActive = false;
@@ -26,6 +27,20 @@ class GameScene {
 
     //Object to store the timer
     this.timeTaken = "";
+    //Keep a reference to the items spawned by the UI/Drag and drop
+    this.items = this.ui.items;
+    //The toolbar object
+    this.toolBar = new toolbar();
+
+    //Bind events for the click, for the oolbar
+    window.addEventListener("click", this.checkToolbarClick.bind(this));
+  }
+
+  //Method to intialise the level, where the ball spawns, and setting ui elements values
+  initLevel(level)
+  {
+    this.currentLevel = level;
+    this.ui.setUi(level);
   }
 
   /**
@@ -43,31 +58,32 @@ class GameScene {
       if (this.items[i] instanceof Spring) {
         if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
           if (this.items[i].angle === 0) {
-            this.ball.impulse(0, -3);
+            this.ball.impulse(0,-10);
+	          this.ball.position.y -= this.ball.radius;
           }
-          else if (this.items[i].angle === 90) {
-            this.ball.impulse(3, 0);
+          else if(this.items[i].angle === 90){
+            this.ball.impulse(10,0);
+            this.ball.position.x += this.ball.radius;
           }
-          else if (this.items[i].angle === 180) {
-            this.ball.impulse(0, 3);
+          else if(this.items[i].angle === 180){
+            this.ball.impulse(0,10);
+            this.ball.position.y += this.ball.radius;
           }
-          else {
-            this.ball.impulse(-3, 0);
+          else{
+            this.ball.impulse(-10,0);
+            this.ball.position.x -= this.ball.radius;
           }
           this.items[i].bounce();
         }
-        this.items[i].update(dt);
       }
-
-
+      //we should be updating all items here, regardless of what they are
+      this.items[i].update(dt);
     }
-
-    this.ball.applyForce(0, this.gravity);
+    
     this.ball.update(dt);
     this.block.update(dt);
-
-    //Update UI
-    this.ui.update(dt);
+    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+    
 
     this.floorBlock.update(dt);
     this.zBlock.update(dt);
@@ -78,11 +94,39 @@ class GameScene {
     if (this.keyboard.isButtonPressed("6") && this.scoreboard.timerActive == true) {
       this.scoreboard.stopTimer();
       //Insert level number here
-      //this.scoreboard.playerName = "Player";
+      //this.scoreboard.playerName = "";
       this.scoreboard.initBoard("session");
-      this.scoreboard.addToBoard("Test");
-      console.log(this.scoreboard.getBoard());
+      this.scoreboard.addToBoard(dt);
+      //console.log(this.scoreboard.getBoard());
     }
+    //Update UI
+    this.ui.update(dt);
+  }
+
+  checkToolbarClick(e)
+  {
+    let returned = this.toolBar.checkButton(e);
+
+    if(returned === "trash")
+    {
+      console.log("Trash");
+    }
+
+    if(returned === "delete")
+    {
+      console.log("delete");
+    }
+
+    if(returned === "exit")
+    {
+      console.log("exit")
+    }
+
+    if(returned === "restart")
+    {
+      console.log("restart");
+    }
+
   }
 
   /**
@@ -96,11 +140,10 @@ class GameScene {
     for (var i in this.items) {
       this.items[i].draw(ctx);
     }
-    this.block.draw(ctx);
-    this.floorBlock.draw(ctx);
-    this.zBlock.draw(ctx);
-    this.ball.draw(ctx);
 
+    this.ball.draw(ctx);
+    if (this.currentLevel !== null) { this.currentLevel.draw(ctx); }
+    
     //Draw the Ui on top of everything else
     this.ui.draw(ctx);
     // this.spring.draw(ctx);

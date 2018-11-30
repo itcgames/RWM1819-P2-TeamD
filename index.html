@@ -21,6 +21,18 @@
     <script src="lib/RWM1819-Scoreboard-A/src/scoreboard.css"></script>
 
     <!-- Game Components -->
+
+    <!-- Levels feature START -->
+    <script src="src/utils/vector_math.js"></script>
+    
+    <script src="src/scenes/game-scene/base_block.js"></script>
+    <script src="src/scenes/game-scene/start_block.js"></script>
+    <script src="src/scenes/game-scene/end_block.js"></script>
+    <script src="src/scenes/game-scene/wall_block.js"></script>
+    <script src="src/scenes/game-scene/level.js"></script>
+    <!-- Levels feature END -->
+
+    <script src="src/scenes/game-scene/tool_bar.js"></script>
     <script src="src/scenes/game-scene/contraptions/spring-contraption.js"></script>
     <script src="src/scenes/game-scene/floor_block.js"></script>
     <script src="src/scenes/game-scene/z_block.js"></script>
@@ -44,6 +56,6 @@
     
     <script src="src/main.js"></script>
 </head>
-<body onload="main();">
+<body onload="main();" style="overflow: hidden">
 </body>
 </html>
