@@ -34,6 +34,10 @@ class Game {
         allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
       }.bind(this),
       function (e) { console.error("Error in Game.constructor() -> level loading"); });
+
+      //Load background image for game
+      this.bgImg = new Image();
+      this.bgImg.src = "./src/resources/game_bg.png";
   }
 
   run() {
@@ -72,12 +76,12 @@ class Game {
     }
   }
 
-  menuClickHandler()
+  menuClickHandler(e)
   {
     //If the scene has a method called checkButtonClick
     if(typeof this.mManager.current.value.checkButtonClick === 'function')
     {
-      var returned = this.mManager.current.value.checkButtonClick();
+      var returned = this.mManager.current.value.checkButtonClick(e);
       //If the first item return is true, then change our scene depending on
       //button name
       if(returned !== ""){
@@ -99,6 +103,8 @@ class Game {
   }
 
   render() {
+    this.canvas.context2D.drawImage(this.bgImg, 0, 0);
+
     //Call draw on the menu manager and pass the context over as canvas is not needed?
     this.mManager.draw(this.canvas.context2D);
   }

@@ -17,7 +17,7 @@ class MainMenuScene
 
   }
 
-  checkButtonClick()
+  checkButtonClick(e)
   {
     //Loop through our buttons
     for(let btn of this.btns){
@@ -31,9 +31,6 @@ class MainMenuScene
   }
 
   draw(ctx){
-    //Draw blue to the canvas
-    ctx.fillStyle = "#3275e0";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     // Draw our backdrop
     ctx.drawImage(this.backDrop, 412, 150);

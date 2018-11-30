@@ -23,7 +23,7 @@ class LevelSelectScene
 
   }
 
-  checkButtonClick(){
+  checkButtonClick(e){
     //Loop through our buttons
     for(let btn of this.btns){
       if(btn.mouseClicked()){ //If the button was clicked
@@ -54,9 +54,6 @@ class LevelSelectScene
   }
 
   draw(ctx){
-    ctx.fillStyle = "#33e0c6";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
     ctx.drawImage(this.sceneBg, 412, 150);
 
     //Draw our buttons

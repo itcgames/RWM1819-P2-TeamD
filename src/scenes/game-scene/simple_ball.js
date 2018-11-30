@@ -118,7 +118,11 @@ class Ball {
    * force to be applied on the y axis.
    */
   impulse(xForce, yForce) {
-    this.velocity.x = xForce;
-    this.velocity.y = yForce;
+    if (xForce != 0) {
+      this.velocity.x = xForce;
+    }
+    if (yForce != 0) {
+      this.velocity.y = yForce;
+    }
   }
 }
