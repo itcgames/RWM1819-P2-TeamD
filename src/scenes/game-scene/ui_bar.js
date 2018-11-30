@@ -2,7 +2,7 @@ class UI {
   constructor() {
     //our text positions for the amount of items available
     this.textPositions = [[220,17], [429, 17], [638, 17], [847, 17], [1056, 17], [1265, 17]];
-    this.itemsAvailable = [3, 2, 4, 1, 1, 1];
+    this.itemsAvailable = [0, 0, 0, 0, 0, 0];
 
     //Ui Backdrop showing all the items
     this.uiBackdrop = new Image();
@@ -51,6 +51,11 @@ class UI {
     this.items = [];
     //The index of the last item dragged
     this.lastDragged = undefined;
+  }
+  setUi(data)
+  {
+    //Set the items available that we can place
+    this.itemsAvailable = data;
   }
 
   checkDraggable(rect) {

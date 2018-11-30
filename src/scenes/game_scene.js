@@ -22,7 +22,10 @@ class GameScene {
         /** @type {[]} */
         const allLevelsData = JSON.parse(data);
         allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
-        if (this.levels.length > 0) { this.currentLevel = this.levels[0]; }
+        if (this.levels.length > 0) { 
+          this.currentLevel = this.levels[0];
+           //Set the levelData
+          this.ui.setUi(this.currentLevel.availableBlocks); }
       }.bind(this),
       function (e) { console.error("Error in GameScene.constructor() -> level loading"); });
 
@@ -73,8 +76,6 @@ class GameScene {
     this.ball.update(dt);
     this.block.update(dt);
     if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
-    // Debug
-    console.log(this.ball.acceleration);
     
 
     this.floorBlock.update(dt);

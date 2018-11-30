@@ -27,6 +27,12 @@
                 "dimensions": { "x": 100, "y": 80 },
                 "color": { "r": 0, "g": 0, "b": 255 }
             }
-        ]
+        ],
+		"Block1":3,
+		"Block2":3,
+		"Block3":4,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
     }
 ]
