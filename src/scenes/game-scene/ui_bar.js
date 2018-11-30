@@ -52,6 +52,11 @@ class UI {
     //The index of the last item dragged
     this.lastDragged = undefined;
   }
+  setUi(data)
+  {
+    //Set the items available that we can place
+    this.itemsAvailable = data.availableBlocks;
+  }
 
   checkDraggable(rect) {
     if (this.dnd.pointIntersection(this.dnd.mouseX, this.dnd.mouseY, rect)) {

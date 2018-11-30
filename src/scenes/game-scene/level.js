@@ -32,6 +32,13 @@ class Level {
     /** @type {Array<WallBlock>} */
     this.walls = [];
     jsWallBlocks.forEach(wall => this.walls.push(new WallBlock(wall.position, wall.dimensions, wall.color)), this);
+
+    /**
+     * Parsing amount of placeable blocks.
+     * @type {Array<{ block: number }>}
+     */
+    this.availableBlocks = [parsedData["Block1"],parsedData["Block2"],parsedData["Block3"],
+    parsedData["Trap1"], parsedData["Trap2"], parsedData["Trap3"]];
   }
 
   /**

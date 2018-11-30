@@ -20,6 +20,20 @@ class Game {
     //Creating a bind for the click event, other click events will still work
     //But this one is for handling the clicking of buttons
     window.addEventListener("click", this.menuClickHandler.bind(this));
+
+    //Load in our level data
+    /** @type {Array<Level>} */
+    this.levels = [];
+    /** @type {Level} */
+    this.currentLevel = null;
+    Level.load(
+      "./src/resources/levels.json",
+      function (e, data) {
+        /** @type {[]} */
+        const allLevelsData = JSON.parse(data);
+        allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
+      }.bind(this),
+      function (e) { console.error("Error in Game.constructor() -> level loading"); });
   }
 
   run() {
@@ -67,8 +81,19 @@ class Game {
       //If the first item return is true, then change our scene depending on
       //button name
       if(returned !== ""){
-        //We eval thee string to convert it to javascript code to be executed
+        //We eval the string to convert it to javascript code to be executed
         eval(returned);
+
+        //If we have chosen a level in the level select scene then pass over our data
+        if(returned === "this.mManager.setCurrentScene('Game')"){ 
+          //Pass over the data for the chosen level
+          this.mManager.current.value.initLevel(this.levels[this.mManager.scenes.get("Level Select").selectedLevel - 1]);
+        }
+
+        //If we have chosen to go to the scoreboard, call our scoreboard method
+        if(returned === "this.mManager.setCurrentScene('Scoreboard')"){ 
+          this.mManager.current.value.openScoreboard();
+        }
       }
     }
   }

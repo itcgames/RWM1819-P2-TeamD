@@ -15,6 +15,8 @@ class LevelSelectScene
 
     this.btns = [this.level1Btn, this.level2Btn, this.level3Btn,
       this.level4Btn, this.level5Btn, this.level6Btn];
+
+    this.selectedLevel = 0;
   }
 
   update(dt){
@@ -25,6 +27,24 @@ class LevelSelectScene
     //Loop through our buttons
     for(let btn of this.btns){
       if(btn.mouseClicked()){ //If the button was clicked
+        if(btn == this.level1Btn){
+          this.selectedLevel = 1;
+        }
+        if(btn == this.level2Btn){
+          this.selectedLevel = 2;
+        }
+        if(btn == this.level3Btn){
+          this.selectedLevel = 3;
+        }
+        if(btn == this.level4Btn){
+          this.selectedLevel = 4;
+        }
+        if(btn == this.level5Btn){
+          this.selectedLevel = 5;
+        }
+        if(btn == this.level6Btn){
+          this.selectedLevel = 6;
+        }
         return btn.action; //Return the button action
       }
     }
