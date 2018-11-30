@@ -8,7 +8,7 @@ class LevelButton
     this.btnBg = new Image();
     this.btnBg.src = "./src/resources/gui/level_select_icons.png"
     this.srcRect = imageRect;
-    this.action = "this.mManager.setCurrentScene('Game')"
+    this.action = "this.mManager.fadeTo('Game')"
 
     //Position of the button
     this.x = x;

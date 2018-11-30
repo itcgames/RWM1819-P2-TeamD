@@ -107,7 +107,7 @@ class GameScene {
 
     if (returned === "exit") {
       console.log("exit")
-      newScene = "this.mManager.setCurrentScene('Main Menu')";
+      newScene = "this.mManager.fadeTo('Main Menu')";
     }
 
     if (returned === "restart") {
