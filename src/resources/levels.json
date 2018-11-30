@@ -28,9 +28,189 @@
                 "color": { "r": 0, "g": 0, "b": 255 }
             }
         ],
-		"Block1":3,
-		"Block2":3,
-		"Block3":4,
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
+    },
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        },
+        "walls": [
+            {
+                "position": { "x": 500, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 610, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 720, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            }
+        ],
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
+    },
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        },
+        "walls": [
+            {
+                "position": { "x": 500, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 610, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 720, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            }
+        ],
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
+    },
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        },
+        "walls": [
+            {
+                "position": { "x": 500, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 610, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 720, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            }
+        ],
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
+    },
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        },
+        "walls": [
+            {
+                "position": { "x": 500, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 610, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 720, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            }
+        ],
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
+		"Trap1":1, 
+		"Trap2":1,
+		"Trap3":1
+    },
+    {
+        "start": {
+            "position": { "x": 200, "y": 300 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 0, "g": 255, "b": 0 },
+            "spawnPoint": { "x": 250, "y": 240 }
+        },
+        "end": {
+            "position": { "x": 1500, "y": 800 },
+            "dimensions": { "x": 100, "y": 80 },
+            "color": { "r": 255, "g": 0, "b": 0 }
+        },
+        "walls": [
+            {
+                "position": { "x": 500, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 610, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            },
+            {
+                "position": { "x": 720, "y": 600 },
+                "dimensions": { "x": 100, "y": 80 },
+                "color": { "r": 0, "g": 0, "b": 255 }
+            }
+        ],
+		"Block1":1,
+		"Block2":1,
+		"Block3":1,
 		"Trap1":1, 
 		"Trap2":1,
 		"Trap3":1

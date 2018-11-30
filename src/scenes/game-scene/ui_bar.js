@@ -55,7 +55,8 @@ class UI {
   setUi(data)
   {
     //Set the items available that we can place
-    this.itemsAvailable = data;
+    this.itemsAvailable = [data["Block1"], data["Block2"],data["Block3"], 
+    data["Trap1"], data["Trap2"],data["Trap3"]];
   }
 
   checkDraggable(rect) {

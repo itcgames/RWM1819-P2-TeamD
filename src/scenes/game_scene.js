@@ -12,22 +12,11 @@ class GameScene {
     this.floorBlock = new FloorBlock(900, 300);
     this.zBlock = new Zblock(900, 600);
     
-    /** @type {Array<Level>} */
-    this.levels = [];
     /** @type {Level} */
     this.currentLevel = null;
-    Level.load(
-      "./src/resources/levels.json",
-      function (e, data) {
-        /** @type {[]} */
-        const allLevelsData = JSON.parse(data);
-        allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
-        if (this.levels.length > 0) { 
-          this.currentLevel = this.levels[0];
-           //Set the levelData
-          this.ui.setUi(this.currentLevel.availableBlocks); }
-      }.bind(this),
-      function (e) { console.error("Error in GameScene.constructor() -> level loading"); });
+
+    //Level index for scoreboard
+    this.levelIndex = 0;
 
     //The ui bar
     this.ui = new UI();
@@ -38,6 +27,13 @@ class GameScene {
 
     //Bind events for the click, for the oolbar
     window.addEventListener("click", this.checkToolbarClick.bind(this));
+  }
+
+  //Method to intialise the level, where the ball spawns, and setting ui elements values
+  initLevel(level)
+  {
+    this.currentLevel = level;
+    this.ui.setUi(level);
   }
 
   /**
