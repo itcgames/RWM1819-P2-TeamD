@@ -76,7 +76,7 @@ class Level {
    */
   static collisionsBallToStart(ball, start) {
     const result = collisionManager.maniCircleToAABB(ball.collisionCircle, start.aabb);
-    if (result.collision) { console.log("Collision!"); Level.collisionResponseFromBallToBlock(ball, result.manifest); }
+    if (result.collision) { Level.collisionResponseFromBallToBlock(ball, result.manifest); }
   }
 
   /**
