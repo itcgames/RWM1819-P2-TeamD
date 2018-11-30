@@ -98,14 +98,20 @@ class Level {
    */
   static collisionResponseFromBallToBlock(ball, manifest) {
     const manifestDirection = VectorMath.unit(manifest.circle.distance);
+    const velocityDirection = VectorMath.unit(ball.velocity);
     const ballVelocityMag = VectorMath.length(ball.velocity);
+    const bounceDirection = {
+      x: velocityDirection.x * (manifestDirection.x !== 0 ? manifestDirection.x : 1),
+      y: velocityDirection.y * (manifestDirection.y !== 0 ? manifestDirection.y : 1)
+    };
+
     ball.position = {
       x: ball.position.x + manifest.circle.distance.x,
       y: ball.position.y + manifest.circle.distance.y
     };
     ball.velocity = {
-      x: manifestDirection.x * ballVelocityMag * -(ball.restitution),
-      y: manifestDirection.y * ballVelocityMag * -(ball.restitution)
+      x: bounceDirection.x * ballVelocityMag * -(ball.restitution),
+      y: bounceDirection.y * ballVelocityMag * -(ball.restitution)
     };
   }
 
