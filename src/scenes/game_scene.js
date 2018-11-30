@@ -78,7 +78,7 @@ class GameScene {
     if (this.keyboard.isButtonPressed("6") && this.scoreboard.timerActive == true) {
       this.scoreboard.stopTimer();
       //Insert level number here
-      this.scoreboard.playerName = "Player";
+      //this.scoreboard.playerName = "Player";
       this.scoreboard.initBoard("session");
       this.scoreboard.addToBoard("Test");
       console.log(this.scoreboard.getBoard());
