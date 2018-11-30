@@ -23,4 +23,12 @@ class VectorMath {
       ? { x: v.x / magnitude, y: v.y / magnitude }
       : { x: 0, y: 0 };
   }
+
+  /**
+   * Gets absolute angle, in degrees, representing the direction of the vector.
+   * @param {{ x: number, y: number }} v 
+   */
+  static angle(v) {
+    return Math.atan2(v.x, v.y) * (180 / Math.PI);
+  }
 }
