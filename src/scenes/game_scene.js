@@ -3,7 +3,9 @@ class GameScene {
     this.sceneEnded = false;
     // this.gravity = 0.008;
     // this.springImage = new Image();
-    // this.fanImage = new Image();
+    this.minusGImage = new Image();
+    this.items = [];
+    this.minusG = {};
     // this.fanWindImage = new Image();
     // //this.spring = new Spring(50, 300, this.springImage);
     // this.springImage.addEventListener('load', function () {
@@ -14,7 +16,11 @@ class GameScene {
     // this.fanWindImage.addEventListener('load', function () {
     //   this.items.push(new Fan(10, 440, this.fanImage, this.fanWindImage));
     // }.bind(this));
-    this.items = [];
+    var that = this;
+    this.minusGImage.addEventListener('load', function () {
+      that.minusG = new MinusG(10, 440, this.minusGImage);
+    }.bind(this));
+    this.minusGImage.src = "./src/resources/minusG.png";
     // this.springImage.src = "./src/resources/spring_anim.png";
     // this.fanImage.src = "./src/resources/fan_anim.png";
     // this.fanWindImage.src = "./src/resources/wind.png";
@@ -83,11 +89,15 @@ class GameScene {
       else if (item instanceof Fan) {
         this.fanCollision(item);
       }
+      else if (item instanceof MinusG) {
+        this.minusGCollision(item);
+      }
       item.update(dt);
     }, this);
-
+    this.minusG.update(dt);
     this.ball.update(dt);
     if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball); }
+
 
 
 
@@ -140,7 +150,7 @@ class GameScene {
 
     this.ball.draw(ctx);
     if (this.currentLevel !== null) { this.currentLevel.draw(ctx); }
-
+    this.minusG.draw(ctx);
     //Draw the Ui on top of everything else
     this.ui.draw(ctx);
   }
@@ -196,6 +206,12 @@ class GameScene {
       else {
         this.ball.applyForce(0, -1);
       }
+    }
+  }
+
+  minusGCollision(item) {
+    if (collisionManager.boolCircleToCircle(item.collisionCircle, this.ball.collisionCircle)) {
+        this.ball.ag *= -1;
     }
   }
 }
