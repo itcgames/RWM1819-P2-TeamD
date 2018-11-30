@@ -7,6 +7,8 @@ class ScoreboardScene {
     this.backDrop.src = "./src/resources/gui/scoreboard_backdrop.png";
     this.scoreboard.initBoard("session");
 
+    this.returnBtn = new MenuButton(960, 800, "Main Menu", "this.mManager.fadeTo('Main Menu')");
+
     this.boards = {"1":[], "2":[], "3":[], "4":[], "5":[], "6":[]};
     this.highest = {"1":0, "2":0, "3":0, "4":0, "5":0, "6":0};
     this.boardIndex = ["1", "2", "3", "4", "5", "6"];
@@ -37,9 +39,17 @@ class ScoreboardScene {
 
   }
 
+  checkButtonClick(e)
+  {
+    //Loop through our buttons
+      if(this.returnBtn.mouseClicked()){ //If the button was clicked
+        return this.returnBtn.action; //Return the button action
+    }
+    //return an empty string
+    return "";
+  }
+
   draw(ctx) {
-    ctx.fillStyle = "#bd32e0";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.font = "42px Berlin Sans";
     ctx.textAlign = "center";
     ctx.fillStyle = "#ffffff";
@@ -50,6 +60,8 @@ class ScoreboardScene {
       this.text = new Text(this.highest[i]);
       ctx.fillText(this.text.data, 352 + (175 * i), 580);
     }
+
+    this.returnBtn.draw(ctx);
   }
 
 }

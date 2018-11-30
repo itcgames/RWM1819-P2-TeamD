@@ -1,5 +1,6 @@
 class GameScene {
   constructor() {
+    this.scoreRecorded = false;
     this.sceneEnded = false;
     //Level index for scoreboard
     this.levelIndex = 0;
@@ -11,44 +12,13 @@ class GameScene {
 
     //Object to store the timer
     this.timeTaken = "";
-    // this.gravity = 0.008;
-    // this.springImage = new Image();
-    // this.fanImage = new Image();
-    // this.fanWindImage = new Image();
-    // //this.spring = new Spring(50, 300, this.springImage);
-    // this.springImage.addEventListener('load', function () {
-    //   this.items.push(new Spring(50, 600, this.springImage));
-    // }.bind(this));
-    // this.fanImage.addEventListener('load', function () {
-    // }.bind(this));
-    // this.fanWindImage.addEventListener('load', function () {
-    //   this.items.push(new Fan(10, 440, this.fanImage, this.fanWindImage));
-    // }.bind(this));
     this.items = [];
-    // this.springImage.src = "./src/resources/spring_anim.png";
-    // this.fanImage.src = "./src/resources/fan_anim.png";
-    // this.fanWindImage.src = "./src/resources/wind.png";
     this.ball = new Ball(100, 150);
     var ballupdate = false;
     this.keyboard = new Keyboard();
-    // this.block = new Block(300, 300);
-    // this.floorBlock = new FloorBlock(900, 300);
-    // this.zBlock = new Zblock(900, 600);
 
-    // /** @type {Array<Level>} */
-    // this.levels = [];
-    // /** @type {Level} */
     this.currentLevel = null;
-    // Level.load(
-    //   "./src/resources/levels.json",
-    //   function (e, data) {
-    //     /** @type {[]} */
-    //     const allLevelsData = JSON.parse(data);
-    //     allLevelsData.forEach(function (ele) { this.levels.push(new Level(ele)); }, this);
-    //     if (this.levels.length > 0) { this.currentLevel = this.levels[0]; }
-    //   }.bind(this),
-    //   function (e) { console.error("Error in GameScene.constructor() -> level loading"); });
-
+    this.levelNum = 0;
     //The ui bar
     this.ui = new UI();
     //Keep a reference to the items spawned by the UI/Drag and drop
@@ -58,6 +28,8 @@ class GameScene {
     //The toolbar object
     this.toolBar = new toolbar();
     this.endGame = false;
+
+    this.mManager;
   }
 
 
@@ -78,14 +50,31 @@ class GameScene {
   }
 
   //Method to intialise the level, where the ball spawns, and setting ui elements values
-  initLevel(level)
+  initLevel(level, levelNum, menuManager)
   {
+    this.mManager = menuManager;
+    this.levelNum = levelNum;
+    this.ball.position.x = 100;
+    this.ball.position.y = 150;
+    this.ball.acceleration.x = 0;
+    this.ball.acceleration.y = 0;
+    this.ball.velocity.x = 0;
+    this.ball.velocity.y = 0;
+    this.ballupdate = false;
+    this.endGame = false;
     this.currentLevel = level;
+    this.delete();
     this.ui.setUi(level);
   }
+
+  play() {
+    this.ballupdate = true;
+  }
+
   delete() {
-    this.ui.items.splice(0, this.ui.items.length);
-    this.ui.itemsAvailable = [3, 2, 4, 1, 1, 1];
+    this.ui.returnAllItems(); //Return all items to the bag
+    this.ui.items = []; //Clear the items
+    this.items = this.ui.items; //Set our items again
   }
 
   /**
@@ -94,73 +83,42 @@ class GameScene {
    * time since last update in ms
    */
   update(dt) {
-
-    //If the timer is not running start it
-    if (this.scoreboard.timerActive == false && this.start == false) {
-      this.scoreboard.startTimer();
-      this.start = true;
+    if(this.ballupdate)
+    {
+      //If the timer is not running start it
+      if (this.scoreboard.timerActive == false && this.start == false) {
+        this.scoreboard.startTimer();
+        this.start = true;
+      }
+      this.items.forEach(function (item) {
+        if (item instanceof Spring) {
+          this.springCollision(item);
+        }
+        else if (item instanceof Fan) {
+          this.fanCollision(item);
+        }
+        item.update(dt);
+      }, this);
+      this.ball.update(dt);
+      if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
     }
-    this.items.forEach(function (item) {
-      if (item instanceof Spring) {
-        this.springCollision(item);
-      }
-      else if (item instanceof Fan) {
-        this.fanCollision(item);
-      }
-      item.update(dt);
-    }, this);
-    this.ball.update(dt);
-    if (this.currentLevel !== null) { this.currentLevel.update(dt, this.ball, this); }
 
+    if(this.endGame && !this.scoreRecorded)
+    {   
+      //Update timer
+      this.timeTaken = this.scoreboard.getDisplayTimer();
 
-    //Update timer
-    this.timeTaken = this.scoreboard.getDisplayTimer();
+      //The score the user got this level
+      var score = 100 * (this.ui.itemsUsed / this.ui.maxItems);
+      console.log(score);
 
-    if (this.keyboard.isButtonPressed("6") && this.scoreboard.timerActive == true) {
       this.scoreboard.stopTimer();
       //Insert level number here
-      //this.scoreboard.playerName = "";
+      this.scoreboard.playerName = this.levelNum.toString();
       this.scoreboard.initBoard("session");
       this.scoreboard.addToBoard(dt);
-      //console.log(this.scoreboard.getBoard());
-
-
-    for (var i in this.items) {
-      if (this.items[i] instanceof Spring) {
-        if (collisionManager.boolCircleToCircle(this.items[i].collisionCircle, this.ball.collisionCircle)) {
-          if (this.items[i].angle === 0) {
-            this.ball.impulse(0, -10);
-            this.ball.position.y -= this.ball.radius;
-          }
-          else if (this.items[i].angle === 90) {
-            this.ball.impulse(10, 0);
-            this.ball.position.x += this.ball.radius;
-          }
-          else if (this.items[i].angle === 180) {
-            this.ball.impulse(0, 10);
-            this.ball.position.y += this.ball.radius;
-          }
-          else {
-            this.ball.impulse(-10, 0);
-            this.ball.position.x -= this.ball.radius;
-          }
-          this.items[i].bounce();
-        }
-     
-
-      } else if (this.items[i] instanceof Block || this.items[i] instanceof FloorBlock) {
-        this.squareCollision(this.items[i]);
-      } else if (this.items[i] instanceof Zblock) {
-        this.Zblock(items[i]);
-      }
-      //we should be updating all items here, regardless of what they are
-      this.items[i].update(dt);
-    }
-
-
-    if (this.ballupdate == true) {
-      this.ball.update(dt);
-
+      this.scoreRecorded = true;
+      this.mManager.fadeTo("Level Select");
     }
     //Update UI
     this.ui.update(dt);
@@ -230,7 +188,7 @@ class GameScene {
 
     if (returned === "exit") {
       console.log("exit")
-      newScene = "this.mManager.setCurrentScene('Main Menu')";
+      newScene = "this.mManager.fadeTo('Main Menu')";
     }
 
     if (returned === "restart") {
@@ -253,9 +211,6 @@ class GameScene {
    * canvas we want to draw to
    */
   draw(ctx) {
-    ctx.fillStyle = "#71f441";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
 
     this.ball.draw(ctx);
     if (this.currentLevel !== null) { this.currentLevel.draw(ctx); }

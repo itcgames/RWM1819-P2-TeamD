@@ -111,6 +111,31 @@ class Fan {
   update(dt) {
     this.position.x = this.rect.x;
     this.position.y = this.rect.y;
+    this.windAnimationBox.position.x = this.position.x + 340;
+    this.windAnimationBox.position.y = this.position.y;
+    this.collisionBox.position.x = this.windAnimationBox.position.x - 310;
+    this.collisionBox.position.y = this.windAnimationBox.position.y - 40;
+
+    this.collisionBox.points = {
+      top_left: {
+        x: this.collisionBox.position.x,
+        y: this.collisionBox.position.y
+      },
+      top_right: {
+        x: this.collisionBox.position.x + this.collisionBox.size.width,
+        y: this.collisionBox.position.y
+      },
+      bottom_right: {
+        x: this.collisionBox.position.x + this.collisionBox.size.width,
+        y: this.collisionBox.position.y + this.collisionBox.size.height
+      },
+      bottom_left: {
+        x: this.collisionBox.position.x,
+        y: this.collisionBox.position.y + this.collisionBox.size.height
+      }
+    };
+
+
     this.fanAnimator.update(dt, this.position.x + (this.size.width / 2), this.position.y);
     this.windAnimator.update(dt, this.windAnimationBox.position.x, this.windAnimationBox.position.y);
     this.fanSoundManager.play("fan_sound");

@@ -34,11 +34,20 @@ class UI {
     //The spring image source
     this.springImage.src = "./src/resources/spring_anim.png";
 
+    //Variables for a fan
+    this.fanImg = new Image();
+    this.fanWindImg = new Image();
+    this.fanImg.src = "./src/resources/fan_anim.png";
+    this.fanWindImg.src = "./src/resources/wind.png";
+
     //The object we are currently dragging
     this.objDragging = undefined;
 
     //Create the drag and dropper
     this.dnd = new DragDrop();
+
+    this.maxItems = 0;
+    this.itemsUsed = 0;
 
     //Bind events for the drag and drop
     window.addEventListener("mousedown", this.mouseDown.bind(this));
@@ -51,10 +60,48 @@ class UI {
     this.items = [];
     //The index of the last item dragged
     this.lastDragged = undefined;
+
+    //The loaded data
+    this.data;
+
+    //Keyhandler
+    this.kh = new Keyboard();
   }
   setUi(data)
   {
+    this.itemsUsed = 0;
+    this.data = data;
     //Set the items available that we can place
+    this.itemsAvailable = data.availableBlocks;
+
+    for(var i in this.itemsAvailable){
+      this.maxItems += this.itemsAvailable[i];
+    }
+  }
+
+  returnAllItems()
+  {
+    this.items.forEach(function (item) {
+      if(item instanceof Spring){
+        this.itemsAvailable[4]++;
+      }
+      else if(item instanceof FloorBlock){
+        this.itemsAvailable[1]++;
+      }
+      else if(item instanceof Block){
+        this.itemsAvailable[0]++;
+      }
+      else if(item instanceof Zblock){
+        this.itemsAvailable[2]++;
+      }      
+      else if(this.lastDragged instanceof Fan){
+        this.itemsAvailable[3]++;
+      }
+    }, this);
+  }
+
+  resetUi()
+  {
     this.itemsAvailable = data.availableBlocks;
   }
 
@@ -75,11 +122,13 @@ class UI {
         item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a z block
       }
       if(rect == this.fanCollider){
-        item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a Fan
+        item = new Fan(this.dnd.mouseX - 50, this.dnd.mouseY - 15, this.fanImg, this.fanWindImg);
       }
       if(rect == this.gravCollider){
         item = new FloorBlock(this.dnd.mouseX - 150, this.dnd.mouseY - 30); //Needs to be a gravity block thingy
       }
+
+      this.itemsUsed++;
 
       //Add to our items vector
       this.items.push(item);
@@ -152,7 +201,11 @@ class UI {
         else if(this.lastDragged instanceof Zblock){
           this.itemsAvailable[2]++;
         }
-
+        else if(this.lastDragged instanceof Fan){
+          this.itemsAvailable[3]++;
+        }
+        //Take away from items used
+        this.itemsUsed--; 
         //Need the other classes complete to add the last ones
 
 
@@ -175,6 +228,13 @@ class UI {
 
     //If we are dragging
     if (this.dragging) {
+
+      if(this.kh.isButtonPressed("E"))
+      {
+        this.lastDragged.rotate(90);
+      }
+
+
       //And our ui backdrop is above, then move it down
       if (this.dragBackdropY !== 0) {
         this.dragBackdropY = this.lerp(this.dragBackdropY, 0, .25);
@@ -187,11 +247,11 @@ class UI {
         this.dragBackdropY = this.lerp(this.dragBackdropY, -75, .25);
       }
     }
-
+  
     //Update all of the items we have created
-    for (var index in this.items) {
-      this.items[index].update(dt);
-    }
+    this.items.forEach(function (item) {
+      item.update(dt);
+    }, this);
   }
 
   //Simple lerp function
@@ -213,8 +273,8 @@ class UI {
     ctx.drawImage(this.uiDragBackdrop, 0, this.dragBackdropY);
 
     //Draw all of the items we have created
-    for (var index in this.items) {
-      this.items[index].draw(ctx);
-    }
+    this.items.forEach(function (item) {
+      item.draw(ctx);
+    }, this);
   }
 }

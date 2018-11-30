@@ -5,8 +5,8 @@ class MainMenuScene
     this.backDrop = new Image();
     this.backDrop.src = "./src/resources/gui/main_menu_backdrop.png";
 
-    this.levelSelectBtn = new MenuButton(960, 354, "Level Select", "this.mManager.setCurrentScene('Level Select')");
-    this.scoreboardBtn = new MenuButton(960, 562, "Scoreboard", "this.mManager.setCurrentScene('Scoreboard')");
+    this.levelSelectBtn = new MenuButton(960, 354, "Level Select", "this.mManager.fadeTo('Level Select')");
+    this.scoreboardBtn = new MenuButton(960, 562, "Scoreboard", "this.mManager.fadeTo('Scoreboard')");
     this.exitGameBtn = new MenuButton(960, 770, "Exit Game", "");
 
     //Add our buttons for easy looping
@@ -31,9 +31,6 @@ class MainMenuScene
   }
 
   draw(ctx){
-    //Draw blue to the canvas
-    ctx.fillStyle = "#3275e0";
-    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
     // Draw our backdrop
     ctx.drawImage(this.backDrop, 412, 150);
